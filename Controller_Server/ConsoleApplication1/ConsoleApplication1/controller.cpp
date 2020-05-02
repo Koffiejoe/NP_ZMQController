@@ -1,12 +1,18 @@
 #include "controller.h"
-controller::controller()
+
+controller::controller(std::string commPort)
 {
-	//send initial handshake to get controller type
-	controllerType = 0; //set correct
+	controllerSerial.setPort(commPort);
+	controllerSerial.setBaudrate(9600);
+	controllerSerial.open();
 }
 
 controller::~controller()
 {
-	//send command to shutdown (so turnoff all enabled things like rumble etc etc)
+	controllerSerial.close();
 }
 
+std::string controller::getPort()
+{
+	return controllerSerial.getPort();
+}
