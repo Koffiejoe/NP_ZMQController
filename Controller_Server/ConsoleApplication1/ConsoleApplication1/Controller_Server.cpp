@@ -6,8 +6,6 @@
 #include "controller.h"
 #include "NES.h"
 
-void* context; //Global context, because you only need one !
-
 int main(int argc, char* argv[])
 {
 	int ID = 0;
@@ -20,7 +18,7 @@ int main(int argc, char* argv[])
 		sscanf_s(argv[1], "%d", &ID);
 		std::cout << "server started with ID: " << ID;
 	}
-
+	
 	NES *myController = new NES("COM5");
 
 
