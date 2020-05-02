@@ -9,7 +9,7 @@ ZMQHandler::ZMQHandler(char* sub, char* push)
 	zmq_connect(subPtr, sub);
 
 	//subscribe to channel of server 
-	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "DMController>", 14);
+	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "controllerService?>", 20);
 }
 
 ZMQHandler::~ZMQHandler()
@@ -20,11 +20,24 @@ ZMQHandler::~ZMQHandler()
 	zmq_ctx_term(context); //cleaning lady goes to work
 }
 
-int ZMQHandler::run()
+int ZMQHandler::recv()
+{
+	char buffer[500];					//entire incoming string
+	char* commandPtr, command[15];		//command part
+	char *argumentsPtr, arguments[100];	//arguments part
+
+	if (myController == NULL)
+	{
+		return -1;
+	}
+	zmq_recv(subPtr, buffer, sizeof(buffer), 0);
+	//Decode the message received
+
+}
+int ZMQHandler::send()
 {
 	if (myController == NULL)
 	{
 		return -1;
 	}
-
 }

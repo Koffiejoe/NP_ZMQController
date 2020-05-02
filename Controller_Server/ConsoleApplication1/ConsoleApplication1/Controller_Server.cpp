@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	int ID = 0;
 	if (argc != 2)
 	{
-		std::cout << "Invalid Arguments! Start with ./Controller_Server <ID_OF_SERVER>\n";
+		//std::cout << "Invalid Arguments! Start with ./Controller_Server <ID_OF_SERVER>\n";
 	}
 	else
 	{
@@ -19,9 +19,15 @@ int main(int argc, char* argv[])
 		std::cout << "server started with ID: " << ID;
 	}
 	
-	NES *myController = new NES("COM5");
+	//NES *myController = new NES("COM5");
 
-
-
-	delete myController;
+	char buffer[500] = "controllerService?>aapje>";					//entire incoming string
+	char* commandPtr, command[15];		//command part
+	char* argumentsPtr, arguments[100];	//arguments part
+	
+	commandPtr = strchr(buffer, '>');
+	argumentsPtr = strchr(commandPtr + 1, '>');
+	std::cout << commandPtr << std::endl;
+	std::cout << sizeof(buffer) << std::endl;
+	//delete myController;
 }

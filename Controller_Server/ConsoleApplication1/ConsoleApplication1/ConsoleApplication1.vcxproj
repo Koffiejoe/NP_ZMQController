@@ -162,7 +162,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Users\KoffieJoe\Desktop\Controller_Server\ConsoleApplication1\ConsoleApplication1\Controller_Server.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="Controller_Server.cpp" />
     <ClCompile Include="gamecube.cpp" />

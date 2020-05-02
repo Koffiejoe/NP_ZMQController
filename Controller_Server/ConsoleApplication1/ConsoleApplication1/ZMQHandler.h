@@ -5,7 +5,8 @@
 class ZMQHandler
 {
 	ZMQHandler(char* pub, char* push);
-	int run();
+	int recv();
+	int send();
 	controller *myController = NULL;
 private:
 	//vars
