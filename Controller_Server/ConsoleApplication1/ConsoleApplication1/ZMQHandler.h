@@ -4,7 +4,9 @@
 #include "controller.h"
 class ZMQHandler
 {
-	ZMQHandler(char* pub, char* push);
+public:
+	ZMQHandler(const char* pub, const char* push);
+	~ZMQHandler();
 	int recv();
 	int send();
 	controller *myController = NULL;
@@ -13,7 +15,7 @@ private:
 	void* pushPtr, * subPtr, * context;
 
 	//functions
-	~ZMQHandler();
+	
 	
 };
 

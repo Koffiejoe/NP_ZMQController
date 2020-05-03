@@ -41,3 +41,10 @@ bool NES::sendData()
 	//nothing to send
 	return 1;
 }
+
+//automatically updates the values and sends a string ready to be transmitted over ZMQ
+std::string NES::getRawData()
+{
+	getData();
+	return(std::to_string(rawData));
+}

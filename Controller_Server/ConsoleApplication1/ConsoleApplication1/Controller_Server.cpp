@@ -21,7 +21,17 @@ int main(int argc, char* argv[])
 		std::cout << "server started with ID: " << ID;
 	}
 	
-	//NES *myController = new NES("COM5");
+	NES *NESController = new NES("COM5");
 
-	//delete myController;
+	ZMQHandler myHandler("tcp://benternet.pxl-ea-ict.be:24042", "tcp://benternet.pxl-ea-ict.be:24041");
+	myHandler.myController = NESController;
+	while (1)
+	{
+		myHandler.send();
+		Sleep(100);
+	}
+		
+	
+	
+	delete NESController;
 }
