@@ -7,6 +7,7 @@ public:
 	bool bA, bB, bSTART, bSELECT, bUP, bDOWN, bLEFT, bRIGHT;
 	bool getData();
 	bool sendData();
+	std::string getRawData();
 	NES(std::string commPort = "");
 };
 

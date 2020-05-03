@@ -27,6 +27,9 @@
     <ClInclude Include="NES.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ZMQHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Controller_Server.cpp">
@@ -39,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZMQHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
