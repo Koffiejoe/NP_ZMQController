@@ -32,10 +32,10 @@ int ZMQHandler::recv()
 	}
 	zmq_recv(subPtr, buffer, sizeof(buffer), 0);
 	//Decode the message received
-
-	char commands[3][20];			//the commands
+	std::string commands[3];			//the commands
 	char* currPosPtr = buffer;
 	char* nextPosPtr = buffer;
+	char temp[20];
 
 	for (short i = 0; i < 3; ++i)  //max commands = 3
 	{
@@ -44,11 +44,15 @@ int ZMQHandler::recv()
 
 		nextPosPtr = strchr(currPosPtr + 1, '>');
 		if (nextPosPtr == NULL) { break; }									//to not include the last >
+		//should add break if memcpy length > sizeof buffer - 1
 
-		memcpy(commands[i], currPosPtr + 1, (nextPosPtr - currPosPtr) - 1); //copy the length of the command (excluding the start and end >)
-		commands[i][(nextPosPtr - currPosPtr) - 1] = NULL;					//add terminating NULL
+		memcpy(temp, currPosPtr + 1, (nextPosPtr - currPosPtr) - 1);		//copy the length of the command (excluding the start and end >)
+		temp[(nextPosPtr - currPosPtr) - 1] = NULL;							//add terminating NULL
+		commands[i] = temp;
 	}
+
 }
+
 int ZMQHandler::send()
 {
 	if (myController == NULL)
