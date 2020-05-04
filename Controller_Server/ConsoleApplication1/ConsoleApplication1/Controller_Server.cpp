@@ -15,6 +15,7 @@
 int main(int argc, char* argv[])
 {
 	int ID = 0;
+	
 	if (argc != 2)
 	{
 		//std::cout << "Invalid Arguments! Start with ./Controller_Server <ID_OF_SERVER>\n";
@@ -24,7 +25,8 @@ int main(int argc, char* argv[])
 		sscanf_s(argv[1], "%d", &ID);
 		std::cout << "server started with ID: " << ID;
 	}
-	
+	std::cout << "########----ControllerServer Started! ----########" << std::endl;
+	std::cout << "##################################################" << std::endl << std::endl;
 	NES *NESController = new NES("COM5");
 
 	ZMQHandler myHandler("tcp://benternet.pxl-ea-ict.be:24042", "tcp://benternet.pxl-ea-ict.be:24041");
