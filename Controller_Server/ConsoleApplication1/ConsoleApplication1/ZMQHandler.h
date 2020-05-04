@@ -12,6 +12,7 @@ public:
 	int recv();
 	int send();
 	controller *myController = NULL;
+	int updateSpeed = 500;				//in ms
 private:
 	//vars
 	void* pushPtr, * subPtr, * context;

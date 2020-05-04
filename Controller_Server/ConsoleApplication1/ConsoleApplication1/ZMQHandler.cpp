@@ -55,8 +55,7 @@ int ZMQHandler::recv()
 	}
 	
 	//decoding and sending respons
-	int cNumber = 0;					//this should not be here
-	int updateSpeed = 0;                //this should be not here but in .h
+	int cNumber = 0;					//move when everything is in vecotr!!!
 	//--set something with the controller--
 	if (commands[0] == "sControl")
 	{
@@ -93,12 +92,33 @@ int ZMQHandler::recv()
 		}
 
 	}
-	//--get list of controllers connected--
+	//--get updatespeed
+	else if (commands[0] == "gUpdate")
+	{
+		//get number of controller and check if correct
+		try
+		{
+			cNumber = stoi(commands[1], NULL, 10);
+		}
+		//if not correct: send error and exit
+		catch (std::invalid_argument)
+		{
+			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
+			return(-1);
+		}
+		//add controller number check, but is not yet here
+		char temp[50];
+		int characters;
+		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0",cNumber, updateSpeed); //characters: total ammount
+		zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
+	}
+
 	else
 	{
 		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 36, 0);
 		return(-1);
 	}
+	return(1);
 }
 
 int ZMQHandler::send()
@@ -113,5 +133,5 @@ int ZMQHandler::send()
 	command += myController->getRawData();
 	command += '>';
 	const void* cvCommand = command.c_str();
-	std::cout << "sending: " << zmq_send(pushPtr, cvCommand, sizeof(command), 0) << std::endl;
+	zmq_send(pushPtr, cvCommand, sizeof(command), 0);
 }
