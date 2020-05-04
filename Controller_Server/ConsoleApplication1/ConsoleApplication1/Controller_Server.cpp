@@ -25,9 +25,12 @@ int main(int argc, char* argv[])
 
 	ZMQHandler myHandler("tcp://benternet.pxl-ea-ict.be:24042", "tcp://benternet.pxl-ea-ict.be:24041");
 	myHandler.myController = NESController;
+
+	
 	while (1)
 	{
-		myHandler.send();
+		//myHandler.send();
+		myHandler.recv();
 		Sleep(100);
 	}
 		

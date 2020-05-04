@@ -1,6 +1,7 @@
 #include "ZMQHandler.h"
 ZMQHandler::ZMQHandler(const char* sub, const char* push)
 {
+	char filterString[] = "controllerService?>";
 	context = zmq_ctx_new();
 	pushPtr = zmq_socket(context, ZMQ_PUSH);
 	subPtr = zmq_socket(context, ZMQ_SUB);
@@ -9,7 +10,7 @@ ZMQHandler::ZMQHandler(const char* sub, const char* push)
 	zmq_connect(subPtr, sub);
 
 	//subscribe to channel of server 
-	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "controllerService?>", 20);
+	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, filterString, sizeof(filterString) - 1);
 }
 
 ZMQHandler::~ZMQHandler()
@@ -28,9 +29,13 @@ int ZMQHandler::recv()
 	{
 		return -1;
 	}
-	zmq_recv(subPtr, buffer, sizeof(buffer), 0);
+
+	if (zmq_recv(subPtr, buffer, sizeof(buffer), ZMQ_NOBLOCK) == -1)
+	{
+		return -1;
+	}
 	//Decode the message received
-	char* commands[4];			//the commands
+	std::string commands[4];			//the commands
 	char* currPosPtr = buffer;
 	char* nextPosPtr = buffer;
 	char temp[20];
@@ -56,12 +61,12 @@ int ZMQHandler::recv()
 	if (commands[0] == "sControl")
 	{
 		//get number of controller and check if correct
-		if (strtol(commands[1], NULL, 10) != 0 && errno != LONG_MAX && errno != LONG_MIN) 
+		try
 		{
-			cNumber = strtol(commands[1], NULL, 10);
+			cNumber = stoi(commands[1], NULL, 10);
 		}
 		//if not correct: send error and exit
-		else
+		catch(std::invalid_argument)
 		{
 			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);	
 			return(-1);
@@ -70,11 +75,11 @@ int ZMQHandler::recv()
 
 		if (commands[2] == "sUpdate")
 		{
-			if (strtol(commands[3], NULL, 10) != 0 && errno != LONG_MAX && errno != LONG_MIN)
+			try
 			{
-				updateSpeed = strtol(commands[1], NULL, 10);
-			}
-			else
+				updateSpeed = stoi(commands[3], NULL, 10);
+			} //no number
+			catch(std::invalid_argument)
 			{
 				zmq_send(pushPtr, "controllerService!>err>INV_UPD_SPEED>", 38, 0);
 				return(-1);
@@ -83,7 +88,7 @@ int ZMQHandler::recv()
 		//add extra 3rd commands here
 		else
 		{
-			zmq_send(pushPtr, "controllerService!>err>INV_3RD_COM>", 38, 0);
+			zmq_send(pushPtr, "controllerService!>err>INV_3RD_COM>", 36, 0);
 			return(-1);
 		}
 
@@ -91,7 +96,7 @@ int ZMQHandler::recv()
 	//--get list of controllers connected--
 	else
 	{
-		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 38, 0);
+		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 36, 0);
 		return(-1);
 	}
 }

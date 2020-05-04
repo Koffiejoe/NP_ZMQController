@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include <string.h>
 #include <zmq.h>
 #include "controller.h"
+
 class ZMQHandler
 {
 public:
