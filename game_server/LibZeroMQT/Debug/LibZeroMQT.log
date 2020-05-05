@@ -1,0 +1,10 @@
+﻿LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_ctx_new referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_ctx_term referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_ctx_shutdown referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_socket referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_close referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_connect referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_send referenced in function _main
+LibZeroMQT.obj : error LNK2019: unresolved external symbol _zmq_recv referenced in function _main
+C:\repos\vcpkg\packages\zeromq_x64-windows-static\debug\lib\libzmq-mt-sgd-4_3_3.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\Bart\Desktop\NP\LibZeroMQT\Debug\LibZeroMQT.exe : fatal error LNK1120: 8 unresolved externals

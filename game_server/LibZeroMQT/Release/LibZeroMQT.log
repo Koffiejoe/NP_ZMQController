@@ -1,0 +1,9 @@
+﻿LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_send
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_socket
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_close
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_connect
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_recv
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_ctx_new
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_ctx_term
+LibZeroMQT.obj : error LNK2001: unresolved external symbol _zmq_ctx_shutdown
+C:\Users\Bart\Desktop\NP\LibZeroMQT\Release\LibZeroMQT.exe : fatal error LNK1120: 8 unresolved externals
