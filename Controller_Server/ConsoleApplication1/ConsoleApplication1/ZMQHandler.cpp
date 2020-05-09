@@ -23,17 +23,20 @@ ZMQHandler::~ZMQHandler()
 
 int ZMQHandler::recv()
 {
-	char buffer[500];					//entire incoming string
+	
+	char buffer[500];			//holds the entire incoming data
 
-	if (myController == NULL)
+	if (controllerList.size() == 0)
 	{
 		return -1;
 	}
 
+	//only reads when data is available, else just returns
 	if (zmq_recv(subPtr, buffer, sizeof(buffer), ZMQ_NOBLOCK) == -1)
 	{
 		return -1;
 	}
+
 	//Decode the message received
 	std::string commands[4];			//the commands
 	char* currPosPtr = buffer;
@@ -55,30 +58,53 @@ int ZMQHandler::recv()
 	}
 	
 	//decoding and sending respons
-	int cNumber = 0;					//move when everything is in vecotr!!!
-	//--set something with the controller--
+	sendRespons(commands);
+
+
+	return(1);
+}
+
+int ZMQHandler::send()
+{
+	char temp[100];
+	if (controllerList.size() == 0)
+	{
+		return -1;
+	}
+
+	for (int contrNum = 0; contrNum < controllerList.size(); ++contrNum)
+	{
+		;
+		sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[0]->getRawData().c_str());
+		std::cout << "Data: " << controllerList[0]->getRawData() << std::endl;
+		std::cout << "Send: " << temp << std::endl;
+		zmq_send(pushPtr, temp, sizeof(temp), 0);
+	}
+
+}
+
+int ZMQHandler::sendRespons(std::string* commands)
+{
+	int cNumber = 0;
+	//###### set something with the controller #######
 	if (commands[0] == "sControl")
 	{
-		//get number of controller and check if correct
-		try
+		try												//get number of controller and check if a number
 		{
 			cNumber = stoi(commands[1], NULL, 10);
 		}
-		//if not correct: send error and exit
-		catch(std::invalid_argument)
+		catch (std::invalid_argument)					//if NaN: send error and exit
 		{
-			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);	
+			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
 			return(-1);
 		}
-		
-
 		if (commands[2] == "sUpdate")
 		{
 			try
 			{
 				updateSpeed = stoi(commands[3], NULL, 10);
 			} //no number
-			catch(std::invalid_argument)
+			catch (std::invalid_argument)
 			{
 				zmq_send(pushPtr, "controllerService!>err>INV_UPD_SPEED>", 38, 0);
 				return(-1);
@@ -92,16 +118,16 @@ int ZMQHandler::recv()
 		}
 
 	}
-	//--get updatespeed
+
+
+	//######## get updatespeed ########
 	else if (commands[0] == "gUpdate")
 	{
-		//get number of controller and check if correct
-		try
+		try													//get number of controller and check if correct
 		{
 			cNumber = stoi(commands[1], NULL, 10);
 		}
-		//if not correct: send error and exit
-		catch (std::invalid_argument)
+		catch (std::invalid_argument)						//if not correct: send error and exit
 		{
 			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
 			return(-1);
@@ -109,7 +135,7 @@ int ZMQHandler::recv()
 		//add controller number check, but is not yet here
 		char temp[50];
 		int characters;
-		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0",cNumber, updateSpeed); //characters: total ammount
+		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0", cNumber, updateSpeed); //characters: total ammount
 		zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
 	}
 
@@ -118,20 +144,5 @@ int ZMQHandler::recv()
 		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 36, 0);
 		return(-1);
 	}
-	return(1);
-}
-
-int ZMQHandler::send()
-{
-	std::string command = "controllerService!>1>";
-
-	if (myController == NULL)
-	{
-		return -1;
-	}
-
-	command += myController->getRawData();
-	command += '>';
-	const void* cvCommand = command.c_str();
-	zmq_send(pushPtr, cvCommand, sizeof(command), 0);
+	return(0);
 }

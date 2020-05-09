@@ -20,11 +20,12 @@ int main(int argc, char* argv[])
 	NES *NESController = new NES("COM5");
 
 	ZMQHandler myHandler("tcp://benternet.pxl-ea-ict.be:24042", "tcp://benternet.pxl-ea-ict.be:24041");
-	myHandler.myController = NESController;
+	myHandler.controllerList.push_back(NESController);
+	myHandler.controllerList.push_back(NESController);//test
 
 	//temp
 	int prevVal = 0;
-	auto end = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	//---
 	while (1)
 	{
