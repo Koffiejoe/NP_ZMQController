@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <string.h>
+#include <vector>
 #include <zmq.h>
 #include "controller.h"
 
