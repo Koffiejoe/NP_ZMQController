@@ -16,11 +16,9 @@ public:
 	int recv();
 	int send();
 	vector<controller*> controllerList;
-	int updateSpeed = 500;				//in ms
 private:
 	//vars
 	void* pushPtr, * subPtr, * context;
-
 	//functions
 	int sendRespons(std::string* commands);
 	

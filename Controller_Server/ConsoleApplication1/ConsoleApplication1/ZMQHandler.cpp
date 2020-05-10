@@ -74,24 +74,35 @@ int ZMQHandler::send()
 
 	for (int contrNum = 0; contrNum < controllerList.size(); ++contrNum)
 	{
-		;
-		sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[0]->getRawData().c_str());
-		std::cout << "Data: " << controllerList[0]->getRawData() << std::endl;
-		std::cout << "Send: " << temp << std::endl;
-		zmq_send(pushPtr, temp, sizeof(temp), 0);
+		//only update when necessary
+		if (controllerList[contrNum]->lastUpdate + std::chrono::milliseconds(controllerList[contrNum]->updateSpeed)
+			<= std::chrono::steady_clock::now())
+		{
+			sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
+
+			zmq_send(pushPtr, temp, sizeof(temp), 0);
+
+			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
+			std::cout << temp << std::endl;
+		}
+
 	}
 
 }
 
 int ZMQHandler::sendRespons(std::string* commands)
 {
-	int cNumber = 0;
+	int cNumber = 0;		//selected controller
 	//###### set something with the controller #######
 	if (commands[0] == "sControl")
 	{
 		try												//get number of controller and check if a number
 		{
 			cNumber = stoi(commands[1], NULL, 10);
+			if (cNumber < 0 || cNumber >(controllerList.size() - 1))
+			{
+				zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
+			}
 		}
 		catch (std::invalid_argument)					//if NaN: send error and exit
 		{
@@ -102,8 +113,8 @@ int ZMQHandler::sendRespons(std::string* commands)
 		{
 			try
 			{
-				updateSpeed = stoi(commands[3], NULL, 10);
-			} //no number
+				controllerList[cNumber]->updateSpeed = stoi(commands[3], NULL, 10);
+			} 
 			catch (std::invalid_argument)
 			{
 				zmq_send(pushPtr, "controllerService!>err>INV_UPD_SPEED>", 38, 0);
@@ -135,7 +146,7 @@ int ZMQHandler::sendRespons(std::string* commands)
 		//add controller number check, but is not yet here
 		char temp[50];
 		int characters;
-		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0", cNumber, updateSpeed); //characters: total ammount
+		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0", cNumber, controllerList[cNumber]->updateSpeed); //characters: total ammount
 		zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
 	}
 
