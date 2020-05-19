@@ -10,16 +10,33 @@
  * ========================================
 */
 #include "project.h"
+#include "stdio.h"
+#include "stdint.h"
+#include "inttypes.h"
+#include "GameCubeController.h"
+uint64 readController(uint8 controller, uint8 rumble);
 
 int main(void)
 {
     CyGlobalIntEnable; /* Enable global interrupts. */
-
-    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
-
+    
+    char recvChar;
+    char resultString[15];
+    uint64_t controllerData;
+    UART_Start();
     for(;;)
     {
-        /* Place your application code here. */
+        
+        recvChar = UART_UartGetChar();
+        if(recvChar == 'a') 
+        {
+            controllerData = readController(1,0);
+            snprintf(resultString, sizeof(resultString), "%"PRIu64, controllerData);
+            UART_UartPutString(resultString);
+            UART_UartPutString("\r\n");
+        }
+
+        
     }
 }
 

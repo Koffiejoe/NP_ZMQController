@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
   28:Generated_Source\PSoC4/UART_1_SCBCLK.c **** * Summary:
   29:Generated_Source\PSoC4/UART_1_SCBCLK.c **** *  Starts the clock, aligned to the specified running clock.
   30:Generated_Source\PSoC4/UART_1_SCBCLK.c **** *
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 2
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 2
 
 
   31:Generated_Source\PSoC4/UART_1_SCBCLK.c **** * Parameters:
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
   39 000a 1360     		str	r3, [r2]
   74:Generated_Source\PSoC4/UART_1_SCBCLK.c **** }
   40              		.loc 1 74 0
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 3
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 3
 
 
   41              		@ sp needed
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  107:Generated_Source\PSoC4/UART_1_SCBCLK.c ****         ((uint32)UART_1_SCBCLK_CMD_DISABLE_MASK);
  108:Generated_Source\PSoC4/UART_1_SCBCLK.c **** 
  109:Generated_Source\PSoC4/UART_1_SCBCLK.c **** #else
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 4
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 4
 
 
  110:Generated_Source\PSoC4/UART_1_SCBCLK.c **** 
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
   91              		@ link register save eliminated.
   92              	.LVL0:
  136:Generated_Source\PSoC4/UART_1_SCBCLK.c ****     uint32 maskVal;
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 5
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 5
 
 
  137:Generated_Source\PSoC4/UART_1_SCBCLK.c ****     uint32 regVal;
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  162:Generated_Source\PSoC4/UART_1_SCBCLK.c **** * Function Name: UART_1_SCBCLK_GetDividerRegister
  163:Generated_Source\PSoC4/UART_1_SCBCLK.c **** ********************************************************************************
  164:Generated_Source\PSoC4/UART_1_SCBCLK.c **** *
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 6
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 6
 
 
  165:Generated_Source\PSoC4/UART_1_SCBCLK.c **** * Summary:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  192:Generated_Source\PSoC4/UART_1_SCBCLK.c **** *
  193:Generated_Source\PSoC4/UART_1_SCBCLK.c **** * Returns:
  194:Generated_Source\PSoC4/UART_1_SCBCLK.c **** *  Fractional Divide value of the clock
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 7
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 7
 
 
  195:Generated_Source\PSoC4/UART_1_SCBCLK.c **** *  0 if the fractional divider is not in use.
@@ -396,48 +396,48 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  168 0006 00000000 		.4byte	.Ldebug_abbrev0
  169 000a 04       		.byte	0x4
  170 000b 01       		.uleb128 0x1
- 171 000c 43010000 		.4byte	.LASF24
+ 171 000c 87010000 		.4byte	.LASF24
  172 0010 0C       		.byte	0xc
- 173 0011 2A000000 		.4byte	.LASF25
- 174 0015 F4010000 		.4byte	.LASF26
+ 173 0011 21000000 		.4byte	.LASF25
+ 174 0015 5C000000 		.4byte	.LASF26
  175 0019 00000000 		.4byte	.Ldebug_ranges0+0
  176 001d 00000000 		.4byte	0
  177 0021 00000000 		.4byte	.Ldebug_line0
  178 0025 02       		.uleb128 0x2
  179 0026 01       		.byte	0x1
  180 0027 06       		.byte	0x6
- 181 0028 40020000 		.4byte	.LASF0
+ 181 0028 41020000 		.4byte	.LASF0
  182 002c 02       		.uleb128 0x2
  183 002d 01       		.byte	0x1
  184 002e 08       		.byte	0x8
- 185 002f B7000000 		.4byte	.LASF1
+ 185 002f FB000000 		.4byte	.LASF1
  186 0033 02       		.uleb128 0x2
  187 0034 02       		.byte	0x2
  188 0035 05       		.byte	0x5
- 189 0036 E4010000 		.4byte	.LASF2
+ 189 0036 28020000 		.4byte	.LASF2
  190 003a 02       		.uleb128 0x2
  191 003b 02       		.byte	0x2
  192 003c 07       		.byte	0x7
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 8
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 8
 
 
- 193 003d D7000000 		.4byte	.LASF3
+ 193 003d 1B010000 		.4byte	.LASF3
  194 0041 02       		.uleb128 0x2
  195 0042 04       		.byte	0x4
  196 0043 05       		.byte	0x5
- 197 0044 21000000 		.4byte	.LASF4
+ 197 0044 38020000 		.4byte	.LASF4
  198 0048 02       		.uleb128 0x2
  199 0049 04       		.byte	0x4
  200 004a 07       		.byte	0x7
- 201 004b C5000000 		.4byte	.LASF5
+ 201 004b 09010000 		.4byte	.LASF5
  202 004f 02       		.uleb128 0x2
  203 0050 08       		.byte	0x8
  204 0051 05       		.byte	0x5
- 205 0052 D1010000 		.4byte	.LASF6
+ 205 0052 15020000 		.4byte	.LASF6
  206 0056 02       		.uleb128 0x2
  207 0057 08       		.byte	0x8
  208 0058 07       		.byte	0x7
- 209 0059 2C010000 		.4byte	.LASF7
+ 209 0059 70010000 		.4byte	.LASF7
  210 005d 03       		.uleb128 0x3
  211 005e 04       		.byte	0x4
  212 005f 05       		.byte	0x5
@@ -445,46 +445,46 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  214 0064 02       		.uleb128 0x2
  215 0065 04       		.byte	0x4
  216 0066 07       		.byte	0x7
- 217 0067 1F010000 		.4byte	.LASF8
+ 217 0067 63010000 		.4byte	.LASF8
  218 006b 04       		.uleb128 0x4
- 219 006c EE010000 		.4byte	.LASF9
+ 219 006c 32020000 		.4byte	.LASF9
  220 0070 02       		.byte	0x2
  221 0071 F701     		.2byte	0x1f7
  222 0073 2C000000 		.4byte	0x2c
  223 0077 04       		.uleb128 0x4
- 224 0078 11010000 		.4byte	.LASF10
+ 224 0078 55010000 		.4byte	.LASF10
  225 007c 02       		.byte	0x2
  226 007d F801     		.2byte	0x1f8
  227 007f 3A000000 		.4byte	0x3a
  228 0083 04       		.uleb128 0x4
- 229 0084 18010000 		.4byte	.LASF11
+ 229 0084 5C010000 		.4byte	.LASF11
  230 0088 02       		.byte	0x2
  231 0089 F901     		.2byte	0x1f9
  232 008b 48000000 		.4byte	0x48
  233 008f 02       		.uleb128 0x2
  234 0090 04       		.byte	0x4
  235 0091 04       		.byte	0x4
- 236 0092 65000000 		.4byte	.LASF12
+ 236 0092 A9000000 		.4byte	.LASF12
  237 0096 02       		.uleb128 0x2
  238 0097 08       		.byte	0x8
  239 0098 04       		.byte	0x4
- 240 0099 F5000000 		.4byte	.LASF13
+ 240 0099 39010000 		.4byte	.LASF13
  241 009d 02       		.uleb128 0x2
  242 009e 01       		.byte	0x1
  243 009f 08       		.byte	0x8
- 244 00a0 DF010000 		.4byte	.LASF14
+ 244 00a0 23020000 		.4byte	.LASF14
  245 00a4 04       		.uleb128 0x4
  246 00a5 00000000 		.4byte	.LASF15
  247 00a9 02       		.byte	0x2
  248 00aa A302     		.2byte	0x2a3
  249 00ac B0000000 		.4byte	0xb0
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 9
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 9
 
 
  250 00b0 05       		.uleb128 0x5
  251 00b1 83000000 		.4byte	0x83
  252 00b5 06       		.uleb128 0x6
- 253 00b6 51000000 		.4byte	.LASF16
+ 253 00b6 48000000 		.4byte	.LASF16
  254 00ba 01       		.byte	0x1
  255 00bb 46       		.byte	0x46
  256 00bc 00000000 		.4byte	.LFB0
@@ -500,7 +500,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  266 00d5 01       		.uleb128 0x1
  267 00d6 9C       		.byte	0x9c
  268 00d7 07       		.uleb128 0x7
- 269 00d8 6B000000 		.4byte	.LASF27
+ 269 00d8 AF000000 		.4byte	.LASF27
  270 00dc 01       		.byte	0x1
  271 00dd 86       		.byte	0x86
  272 00de 00000000 		.4byte	.LFB2
@@ -509,14 +509,14 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  275 00e7 9C       		.byte	0x9c
  276 00e8 23010000 		.4byte	0x123
  277 00ec 08       		.uleb128 0x8
- 278 00ed EA000000 		.4byte	.LASF18
+ 278 00ed 2E010000 		.4byte	.LASF18
  279 00f1 01       		.byte	0x1
  280 00f2 86       		.byte	0x86
  281 00f3 77000000 		.4byte	0x77
  282 00f7 01       		.uleb128 0x1
  283 00f8 50       		.byte	0x50
  284 00f9 08       		.uleb128 0x8
- 285 00fa 03010000 		.4byte	.LASF19
+ 285 00fa 47010000 		.4byte	.LASF19
  286 00fe 01       		.byte	0x1
  287 00ff 86       		.byte	0x86
  288 0100 6B000000 		.4byte	0x6b
@@ -529,7 +529,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  295 010d 83000000 		.4byte	0x83
  296 0111 00000000 		.4byte	.LLST0
  297 0115 0A       		.uleb128 0xa
- 298 0116 FC000000 		.4byte	.LASF21
+ 298 0116 40010000 		.4byte	.LASF21
  299 011a 01       		.byte	0x1
  300 011b 89       		.byte	0x89
  301 011c 83000000 		.4byte	0x83
@@ -537,8 +537,8 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  303 0121 53       		.byte	0x53
  304 0122 00       		.byte	0
  305 0123 0B       		.uleb128 0xb
- 306 0124 96000000 		.4byte	.LASF22
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 10
+ 306 0124 DA000000 		.4byte	.LASF22
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 10
 
 
  307 0128 01       		.byte	0x1
@@ -549,7 +549,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  312 0136 01       		.uleb128 0x1
  313 0137 9C       		.byte	0x9c
  314 0138 0B       		.uleb128 0xb
- 315 0139 4C020000 		.4byte	.LASF23
+ 315 0139 4D020000 		.4byte	.LASF23
  316 013d 01       		.byte	0x1
  317 013e C6       		.byte	0xc6
  318 013f 6B000000 		.4byte	0x6b
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  361 0023 3E       		.uleb128 0x3e
  362 0024 0B       		.uleb128 0xb
  363 0025 03       		.uleb128 0x3
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 11
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 11
 
 
  364 0026 08       		.uleb128 0x8
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  418 005d 0B       		.uleb128 0xb
  419 005e 3B       		.uleb128 0x3b
  420 005f 0B       		.uleb128 0xb
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 12
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 12
 
 
  421 0060 27       		.uleb128 0x27
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  475 0097 13       		.uleb128 0x13
  476 0098 02       		.uleb128 0x2
  477 0099 18       		.uleb128 0x18
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 13
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 13
 
 
  478 009a 00       		.byte	0
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  532 0034 04000000 		.4byte	.LFE4-.LFB4
  533 0038 00000000 		.4byte	0
  534 003c 00000000 		.4byte	0
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 14
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 14
 
 
  535              		.section	.debug_ranges,"",%progbits
@@ -814,140 +814,140 @@ ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 1
  556              	.LASF20:
  557 0019 6D61736B 		.ascii	"maskVal\000"
  557      56616C00 
- 558              	.LASF4:
- 559 0021 6C6F6E67 		.ascii	"long int\000"
- 559      20696E74 
- 559      00
- 560              	.LASF25:
- 561 002a 47656E65 		.ascii	"Generated_Source\\PSoC4\\UART_1_SCBCLK.c\000"
- 561      72617465 
- 561      645F536F 
- 561      75726365 
- 561      5C50536F 
- 562              	.LASF16:
- 563 0051 55415254 		.ascii	"UART_1_SCBCLK_Start\000"
- 563      5F315F53 
- 563      4342434C 
- 563      4B5F5374 
- 563      61727400 
- 564              	.LASF12:
- 565 0065 666C6F61 		.ascii	"float\000"
- 565      7400
- 566              	.LASF27:
- 567 006b 55415254 		.ascii	"UART_1_SCBCLK_SetFractionalDividerRegister\000"
- 567      5F315F53 
- 567      4342434C 
- 567      4B5F5365 
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 15
+ 558              	.LASF25:
+ 559 0021 47656E65 		.ascii	"Generated_Source\\PSoC4\\UART_1_SCBCLK.c\000"
+ 559      72617465 
+ 559      645F536F 
+ 559      75726365 
+ 559      5C50536F 
+ 560              	.LASF16:
+ 561 0048 55415254 		.ascii	"UART_1_SCBCLK_Start\000"
+ 561      5F315F53 
+ 561      4342434C 
+ 561      4B5F5374 
+ 561      61727400 
+ 562              	.LASF26:
+ 563 005c 453A5C72 		.ascii	"E:\\repos\\NP_ZMQController\\microcontroller_code\\"
+ 563      65706F73 
+ 563      5C4E505F 
+ 563      5A4D5143 
+ 563      6F6E7472 
+ 564 008b 4743436F 		.ascii	"GCController\\Controller.cydsn\000"
+ 564      6E74726F 
+ 564      6C6C6572 
+ 564      5C436F6E 
+ 564      74726F6C 
+ 565              	.LASF12:
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 15
 
 
- 567      74467261 
- 568              	.LASF22:
- 569 0096 55415254 		.ascii	"UART_1_SCBCLK_GetDividerRegister\000"
- 569      5F315F53 
- 569      4342434C 
- 569      4B5F4765 
- 569      74446976 
- 570              	.LASF1:
- 571 00b7 756E7369 		.ascii	"unsigned char\000"
- 571      676E6564 
- 571      20636861 
- 571      7200
- 572              	.LASF5:
- 573 00c5 6C6F6E67 		.ascii	"long unsigned int\000"
- 573      20756E73 
- 573      69676E65 
- 573      6420696E 
- 573      7400
- 574              	.LASF3:
- 575 00d7 73686F72 		.ascii	"short unsigned int\000"
- 575      7420756E 
- 575      7369676E 
- 575      65642069 
- 575      6E7400
- 576              	.LASF18:
- 577 00ea 636C6B44 		.ascii	"clkDivider\000"
- 577      69766964 
- 577      657200
- 578              	.LASF13:
- 579 00f5 646F7562 		.ascii	"double\000"
- 579      6C6500
- 580              	.LASF21:
- 581 00fc 72656756 		.ascii	"regVal\000"
- 581      616C00
- 582              	.LASF19:
- 583 0103 636C6B46 		.ascii	"clkFractional\000"
- 583      72616374 
- 583      696F6E61 
- 583      6C00
- 584              	.LASF10:
- 585 0111 75696E74 		.ascii	"uint16\000"
- 585      313600
- 586              	.LASF11:
- 587 0118 75696E74 		.ascii	"uint32\000"
- 587      333200
- 588              	.LASF8:
- 589 011f 756E7369 		.ascii	"unsigned int\000"
- 589      676E6564 
- 589      20696E74 
- 589      00
- 590              	.LASF7:
- 591 012c 6C6F6E67 		.ascii	"long long unsigned int\000"
- 591      206C6F6E 
- 591      6720756E 
- 591      7369676E 
- 591      65642069 
- 592              	.LASF24:
-ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\cc62yDrb.s 			page 16
+ 566 00a9 666C6F61 		.ascii	"float\000"
+ 566      7400
+ 567              	.LASF27:
+ 568 00af 55415254 		.ascii	"UART_1_SCBCLK_SetFractionalDividerRegister\000"
+ 568      5F315F53 
+ 568      4342434C 
+ 568      4B5F5365 
+ 568      74467261 
+ 569              	.LASF22:
+ 570 00da 55415254 		.ascii	"UART_1_SCBCLK_GetDividerRegister\000"
+ 570      5F315F53 
+ 570      4342434C 
+ 570      4B5F4765 
+ 570      74446976 
+ 571              	.LASF1:
+ 572 00fb 756E7369 		.ascii	"unsigned char\000"
+ 572      676E6564 
+ 572      20636861 
+ 572      7200
+ 573              	.LASF5:
+ 574 0109 6C6F6E67 		.ascii	"long unsigned int\000"
+ 574      20756E73 
+ 574      69676E65 
+ 574      6420696E 
+ 574      7400
+ 575              	.LASF3:
+ 576 011b 73686F72 		.ascii	"short unsigned int\000"
+ 576      7420756E 
+ 576      7369676E 
+ 576      65642069 
+ 576      6E7400
+ 577              	.LASF18:
+ 578 012e 636C6B44 		.ascii	"clkDivider\000"
+ 578      69766964 
+ 578      657200
+ 579              	.LASF13:
+ 580 0139 646F7562 		.ascii	"double\000"
+ 580      6C6500
+ 581              	.LASF21:
+ 582 0140 72656756 		.ascii	"regVal\000"
+ 582      616C00
+ 583              	.LASF19:
+ 584 0147 636C6B46 		.ascii	"clkFractional\000"
+ 584      72616374 
+ 584      696F6E61 
+ 584      6C00
+ 585              	.LASF10:
+ 586 0155 75696E74 		.ascii	"uint16\000"
+ 586      313600
+ 587              	.LASF11:
+ 588 015c 75696E74 		.ascii	"uint32\000"
+ 588      333200
+ 589              	.LASF8:
+ 590 0163 756E7369 		.ascii	"unsigned int\000"
+ 590      676E6564 
+ 590      20696E74 
+ 590      00
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccDtTAxx.s 			page 16
 
 
- 593 0143 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 593      43313120 
- 593      352E342E 
- 593      31203230 
- 593      31363036 
- 594 0176 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
- 594      20726576 
- 594      6973696F 
- 594      6E203233 
- 594      37373135 
- 595 01a9 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
- 595      66756E63 
- 595      74696F6E 
- 595      2D736563 
- 595      74696F6E 
- 596              	.LASF6:
- 597 01d1 6C6F6E67 		.ascii	"long long int\000"
- 597      206C6F6E 
- 597      6720696E 
- 597      7400
- 598              	.LASF14:
- 599 01df 63686172 		.ascii	"char\000"
- 599      00
- 600              	.LASF2:
- 601 01e4 73686F72 		.ascii	"short int\000"
- 601      7420696E 
- 601      7400
- 602              	.LASF9:
- 603 01ee 75696E74 		.ascii	"uint8\000"
- 603      3800
- 604              	.LASF26:
- 605 01f4 453A5C55 		.ascii	"E:\\Users\\Dennis Merken\\Documents\\PSoC Creator\\"
- 605      73657273 
- 605      5C44656E 
- 605      6E697320 
- 605      4D65726B 
- 606 0222 4743436F 		.ascii	"GCController\\Controller.cydsn\000"
- 606      6E74726F 
- 606      6C6C6572 
- 606      5C436F6E 
- 606      74726F6C 
+ 591              	.LASF7:
+ 592 0170 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 592      206C6F6E 
+ 592      6720756E 
+ 592      7369676E 
+ 592      65642069 
+ 593              	.LASF24:
+ 594 0187 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 594      43313120 
+ 594      352E342E 
+ 594      31203230 
+ 594      31363036 
+ 595 01ba 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 595      20726576 
+ 595      6973696F 
+ 595      6E203233 
+ 595      37373135 
+ 596 01ed 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 596      66756E63 
+ 596      74696F6E 
+ 596      2D736563 
+ 596      74696F6E 
+ 597              	.LASF6:
+ 598 0215 6C6F6E67 		.ascii	"long long int\000"
+ 598      206C6F6E 
+ 598      6720696E 
+ 598      7400
+ 599              	.LASF14:
+ 600 0223 63686172 		.ascii	"char\000"
+ 600      00
+ 601              	.LASF2:
+ 602 0228 73686F72 		.ascii	"short int\000"
+ 602      7420696E 
+ 602      7400
+ 603              	.LASF9:
+ 604 0232 75696E74 		.ascii	"uint8\000"
+ 604      3800
+ 605              	.LASF4:
+ 606 0238 6C6F6E67 		.ascii	"long int\000"
+ 606      20696E74 
+ 606      00
  607              	.LASF0:
- 608 0240 7369676E 		.ascii	"signed char\000"
+ 608 0241 7369676E 		.ascii	"signed char\000"
  608      65642063 
  608      68617200 
  609              	.LASF23:
- 610 024c 55415254 		.ascii	"UART_1_SCBCLK_GetFractionalDividerRegister\000"
+ 610 024d 55415254 		.ascii	"UART_1_SCBCLK_GetFractionalDividerRegister\000"
  610      5F315F53 
  610      4342434C 
  610      4B5F4765 
