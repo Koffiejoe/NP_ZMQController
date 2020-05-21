@@ -1,0 +1,3 @@
+﻿  ZMQHandler.cpp
+C:\Users\Bart\Desktop\NP\ZeroMQ\ZMQHandler.cpp(112): error C4716:  'ZMQHandler::send': must return a value
+C:\Users\Bart\Desktop\NP\ZeroMQ\ZMQHandler.cpp(97): warning C4715:  'ZMQHandler::recv': not all control paths return a value
