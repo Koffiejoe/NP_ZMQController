@@ -1,3 +1,5 @@
-﻿  ZMQHandler.cpp
-C:\Users\Bart\Desktop\NP\ZeroMQ\ZMQHandler.cpp(112): error C4716:  'ZMQHandler::send': must return a value
-C:\Users\Bart\Desktop\NP\ZeroMQ\ZMQHandler.cpp(97): warning C4715:  'ZMQHandler::recv': not all control paths return a value
+﻿  Game.cpp
+game_server.obj : error LNK2019: unresolved external symbol "public: __cdecl ZMQHandler::ZMQHandler(char const *,char const *)" (??0ZMQHandler@@QEAA@PEBD0@Z) referenced in function main
+game_server.obj : error LNK2019: unresolved external symbol "public: __cdecl ZMQHandler::~ZMQHandler(void)" (??1ZMQHandler@@QEAA@XZ) referenced in function main
+game_server.obj : error LNK2019: unresolved external symbol "public: int __cdecl ZMQHandler::send(void)" (?send@ZMQHandler@@QEAAHXZ) referenced in function main
+C:\Users\Bart\Desktop\NP\ZeroMQ\x64\Debug\ZeroMQ.exe : fatal error LNK1120: 3 unresolved externals

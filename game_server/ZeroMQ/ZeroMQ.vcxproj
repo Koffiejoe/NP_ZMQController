@@ -158,9 +158,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game_server.cpp" />
-    <ClCompile Include="ZMQHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game.h" />
     <ClInclude Include="zmq.h" />
     <ClInclude Include="ZMQHandler.h" />
   </ItemGroup>

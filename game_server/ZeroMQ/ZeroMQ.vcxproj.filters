@@ -18,15 +18,15 @@
     <ClCompile Include="game_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ZMQHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZMQHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="zmq.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

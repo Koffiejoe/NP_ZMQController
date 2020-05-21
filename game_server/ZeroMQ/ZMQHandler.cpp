@@ -1,4 +1,5 @@
 #include "ZMQHandler.h"
+#include "Game.h"
 ZMQHandler::ZMQHandler(const char* sub, const char* push)
 {
 	context = zmq_ctx_new();
@@ -25,7 +26,7 @@ int ZMQHandler::recv()
 {
 	char buffer[500];					//entire incoming string
 	int controllernumber;
-	char movement[4];
+
 	/*if (myController == NULL)
 	{
 		return -1;
@@ -85,7 +86,7 @@ int ZMQHandler::recv()
 				player.append("Bart>");
 				player.append(controllernumber);
 				player.append(">");
-				player.append(movement);
+				player.append(current);
 				zmq_send(pushPtr, player.c_str(), player.size(), 0); //"controllerService!>1>up>"
 				return(-1);
 			}
