@@ -21,19 +21,26 @@ int main(void)
     CyGlobalIntEnable; /* Enable global interrupts. */
     
     char recvChar;
-    char resultString[15];
+    char sendString[16];
     uint64_t controllerData;
+    uint32_t firstPart; //most right bits
+    uint32_t secondPart;//most left bits
     UART_Start();
+    UART_UartPutString("Hello\r\n");
+    controllerData = readController(1,0);
     for(;;)
     {
         
         recvChar = UART_UartGetChar();
-        if(recvChar == 'a') 
+        if(1) 
         {
             controllerData = readController(1,0);
-            snprintf(resultString, sizeof(resultString), "%"PRIu64, controllerData);
-            UART_UartPutString(resultString);
-            UART_UartPutString("\r\n");
+            firstPart = controllerData & 0x00000000FFFFFFFF;
+            secondPart = (controllerData >> 32) & 0x00000000FFFFFFFF;
+            sprintf(sendString, "%08X", secondPart);
+            sprintf(sendString, "%s%08X", sendString, firstPart);
+            UART_UartPutString(sendString);
+            UART_UartPutString("\r");
         }
 
         
