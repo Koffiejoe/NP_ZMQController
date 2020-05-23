@@ -22,28 +22,46 @@ int main(void)
     
     char recvChar;
     char sendString[16];
+    _Bool rumble = 0;
     uint64_t controllerData;
     uint32_t firstPart; //most right bits
     uint32_t secondPart;//most left bits
     UART_Start();
-    UART_UartPutString("Hello\r\n");
-    controllerData = readController(1,0);
     for(;;)
     {
-        
         recvChar = UART_UartGetChar();
-        if(1) 
+        if(recvChar != 0)
         {
-            controllerData = readController(1,0);
-            firstPart = controllerData & 0x00000000FFFFFFFF;
-            secondPart = (controllerData >> 32) & 0x00000000FFFFFFFF;
-            sprintf(sendString, "%08X", secondPart);
-            sprintf(sendString, "%s%08X", sendString, firstPart);
-            UART_UartPutString(sendString);
-            UART_UartPutString("\r");
-        }
+            if(recvChar == 'g') //just send data
+            {
+                controllerData = readController(1,0);
+                readController(1,rumble);
+                
+                //send data
+                firstPart = controllerData & 0x00000000FFFFFFFF;
+                secondPart = (controllerData >> 32) & 0x00000000FFFFFFFF;
+                sprintf(sendString, "%08X", secondPart);
+                sprintf(sendString, "%s%08X", sendString, firstPart);
+                UART_UartPutString(sendString);
+                UART_UartPutString("\r");
+            }
+            if(recvChar == 'r') //rumble
+            {
+                rumble = 1;
+                readController(1,rumble);
+            }
+            if(recvChar == 'n')
+            {
+                rumble = 0;
+                readController(1,rumble);
+            }
+            if(recvChar == 't')
+            {
+                UART_UartPutString("GC_Contr\r\n");
+                
+            }
 
-        
+        }   
     }
 }
 
