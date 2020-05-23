@@ -1,6 +1,7 @@
 #include "ZMQHandler.h"
 ZMQHandler::ZMQHandler(const char* sub, const char* push)
 {
+	char filterString[] = "controllerService?>";
 	context = zmq_ctx_new();
 	pushPtr = zmq_socket(context, ZMQ_PUSH);
 	subPtr = zmq_socket(context, ZMQ_SUB);
@@ -9,7 +10,7 @@ ZMQHandler::ZMQHandler(const char* sub, const char* push)
 	zmq_connect(subPtr, sub);
 
 	//subscribe to channel of server 
-	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "controllerService?>", 20);
+	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, filterString, sizeof(filterString) - 1);
 }
 
 ZMQHandler::~ZMQHandler()
@@ -22,15 +23,22 @@ ZMQHandler::~ZMQHandler()
 
 int ZMQHandler::recv()
 {
-	char buffer[500];					//entire incoming string
+	
+	char buffer[500];			//holds the entire incoming data
 
-	if (myController == NULL)
+	if (controllerList.size() == 0)
 	{
 		return -1;
 	}
-	zmq_recv(subPtr, buffer, sizeof(buffer), 0);
+
+	//only reads when data is available, else just returns
+	if (zmq_recv(subPtr, buffer, sizeof(buffer), ZMQ_NOBLOCK) == -1)
+	{
+		return -1;
+	}
+
 	//Decode the message received
-	char* commands[4];			//the commands
+	std::string commands[4];			//the commands
 	char* currPosPtr = buffer;
 	char* nextPosPtr = buffer;
 	char temp[20];
@@ -50,31 +58,64 @@ int ZMQHandler::recv()
 	}
 	
 	//decoding and sending respons
-	int cNumber = 0;					//this should not be here
-	int updateSpeed = 0;                //this should be not here but in .h
-	//--set something with the controller--
+	sendRespons(commands);
+
+
+	return(1);
+}
+
+int ZMQHandler::send()
+{
+	char temp[100];
+	if (controllerList.size() == 0)
+	{
+		return -1;
+	}
+
+	for (int contrNum = 0; contrNum < controllerList.size(); ++contrNum)
+	{
+		//only update when necessary
+		if (controllerList[contrNum]->lastUpdate + std::chrono::milliseconds(controllerList[contrNum]->updateSpeed)
+			<= std::chrono::steady_clock::now())
+		{
+			sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
+
+			zmq_send(pushPtr, temp, sizeof(temp), 0);
+
+			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
+			std::cout << temp << std::endl;
+		}
+
+	}
+
+}
+
+int ZMQHandler::sendRespons(std::string* commands)
+{
+	int cNumber = 0;		//selected controller
+	//###### set something with the controller #######
 	if (commands[0] == "sControl")
 	{
-		//get number of controller and check if correct
-		if (strtol(commands[1], NULL, 10) != 0 && errno != LONG_MAX && errno != LONG_MIN) 
+		try												//get number of controller and check if a number
 		{
-			cNumber = strtol(commands[1], NULL, 10);
+			cNumber = stoi(commands[1], NULL, 10);
+			if (cNumber < 0 || cNumber >(controllerList.size() - 1))
+			{
+				zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
+			}
 		}
-		//if not correct: send error and exit
-		else
+		catch (std::invalid_argument)					//if NaN: send error and exit
 		{
-			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);	
+			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
 			return(-1);
 		}
-		
-
 		if (commands[2] == "sUpdate")
 		{
-			if (strtol(commands[3], NULL, 10) != 0 && errno != LONG_MAX && errno != LONG_MIN)
+			try
 			{
-				updateSpeed = strtol(commands[1], NULL, 10);
-			}
-			else
+				controllerList[cNumber]->updateSpeed = stoi(commands[3], NULL, 10);
+			} 
+			catch (std::invalid_argument)
 			{
 				zmq_send(pushPtr, "controllerService!>err>INV_UPD_SPEED>", 38, 0);
 				return(-1);
@@ -83,30 +124,36 @@ int ZMQHandler::recv()
 		//add extra 3rd commands here
 		else
 		{
-			zmq_send(pushPtr, "controllerService!>err>INV_3RD_COM>", 38, 0);
+			zmq_send(pushPtr, "controllerService!>err>INV_3RD_COM>", 36, 0);
 			return(-1);
 		}
 
 	}
-	//--get list of controllers connected--
+
+
+	//######## get updatespeed ########
+	else if (commands[0] == "gUpdate")
+	{
+		try													//get number of controller and check if correct
+		{
+			cNumber = stoi(commands[1], NULL, 10);
+		}
+		catch (std::invalid_argument)						//if not correct: send error and exit
+		{
+			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
+			return(-1);
+		}
+		//add controller number check, but is not yet here
+		char temp[50];
+		int characters;
+		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0", cNumber, controllerList[cNumber]->updateSpeed); //characters: total ammount
+		zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
+	}
+
 	else
 	{
-		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 38, 0);
+		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 36, 0);
 		return(-1);
 	}
-}
-
-int ZMQHandler::send()
-{
-	std::string command = "controllerService!>1>";
-
-	if (myController == NULL)
-	{
-		return -1;
-	}
-
-	command += myController->getRawData();
-	command += '>';
-	const void* cvCommand = command.c_str();
-	std::cout << "sending: " << zmq_send(pushPtr, cvCommand, sizeof(command), 0) << std::endl;
+	return(0);
 }

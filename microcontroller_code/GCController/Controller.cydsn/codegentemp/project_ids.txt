@@ -1,0 +1,6 @@
+E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\Controller.cyprj|88fce76e-95ac-4de3-b8d1-25f8a6931f4a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.3\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|09eeb53c-04b6-494b-8947-93ef940eee7f
+E:\Users\Dennis Merken\Documents\PSoC Creator\4.3\Downloads ( 4.3).cylib\Downloads ( 4.3).cyprj|018fdcbc-4463-4a9c-b742-e640c18ddced
+C:\Program Files (x86)\Cypress\PSoC Creator\4.3\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|4bbd5335-afa3-4f2a-9e49-f554fde9a518
+C:\Program Files (x86)\Cypress\PSoC Creator\4.3\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|c8e39253-4f6e-4388-9c38-ca0e8594c41e
+C:\Program Files (x86)\Cypress\PSoC Creator\4.3\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|a64edf4f-56a1-4720-ac61-42538bee743d

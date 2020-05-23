@@ -46,5 +46,5 @@ bool NES::sendData()
 std::string NES::getRawData()
 {
 	getData();
-	return(std::to_string(rawData));
+	return(std::to_string(rawData)); //easy convert to char bc data is 8 bits wide
 }

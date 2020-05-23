@@ -1,0 +1,72 @@
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/CortexM0/ARM_GCC_541/Debug/main.o : E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller1.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller1_aliases.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller2.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller2_aliases.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/CyFlash.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/CyLFClk.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/CyLib.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_BOOT.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_PINS.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_PVT.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SCBCLK.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SCB_IRQ.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SPI_UART.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SPI_UART_PVT.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_rx.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_rx_aliases.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_tx.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_tx_aliases.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cmsis_armcc.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cmsis_compiler.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cmsis_gcc.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/core_cm0.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/core_cm0_psoc4.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cyPm.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cy_em_eeprom.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cydevice_trm.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cydisabledsheets.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cyfitter.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cypins.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cytypes.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/project.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/GameCubeController.h E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/main.c 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller1.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller1_aliases.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller2.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/Controller2_aliases.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/CyFlash.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/CyLFClk.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/CyLib.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_BOOT.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_PINS.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_PVT.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SCBCLK.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SCB_IRQ.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SPI_UART.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_SPI_UART_PVT.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_rx.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_rx_aliases.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_tx.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/UART_tx_aliases.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cmsis_armcc.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cmsis_compiler.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cmsis_gcc.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/core_cm0.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/core_cm0_psoc4.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cyPm.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cy_em_eeprom.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cydevice_trm.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cydisabledsheets.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cyfitter.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cyfitter_cfg.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cypins.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/cytypes.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/Generated_Source/PSoC4/project.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/GameCubeController.h : 
+
+E:/repos/NP_ZMQController/microcontroller_code/GCController/Controller.cydsn/main.c : 
+

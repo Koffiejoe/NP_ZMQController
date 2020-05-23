@@ -4,12 +4,23 @@ controller::controller(std::string commPort)
 {
 	controllerSerial.setPort(commPort);
 	controllerSerial.setBaudrate(9600);
-	controllerSerial.open();
+	lastUpdate = std::chrono::steady_clock::now();
+	try
+	{
+		controllerSerial.open();
+	}
+	catch (serial::IOException) //i.e. if the commport is not in use
+	{
+		std::cout << "Error opening port " << commPort << std::endl;
+	}
 }
 
 controller::~controller()
 {
-	controllerSerial.close();
+	if (controllerSerial.isOpen())
+	{
+		controllerSerial.close();
+	}
 }
 
 std::string controller::getPort()

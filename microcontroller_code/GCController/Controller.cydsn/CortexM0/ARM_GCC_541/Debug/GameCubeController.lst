@@ -1,0 +1,1648 @@
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"GameCubeController.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.readController,"ax",%progbits
+  20              		.align	2
+  21              		.global	readController
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	readController, %function
+  25              	readController:
+  26              	.LFB33:
+  27              		.file 1 "GameCubeController.c"
+   1:GameCubeController.c **** #include "project.h"
+   2:GameCubeController.c **** #include "stdio.h"
+   3:GameCubeController.c **** #include "stdint.h"
+   4:GameCubeController.c **** /*
+   5:GameCubeController.c **** *   Function: readController
+   6:GameCubeController.c **** *
+   7:GameCubeController.c **** *   Gets:
+   8:GameCubeController.c **** *   -(UINT8)controller: which controller has to be selected? one = controller one, all other: contr
+   9:GameCubeController.c **** *   -(UINT8)rumble    : enable vibrating of controller.  zero = off, all other: on
+  10:GameCubeController.c **** *
+  11:GameCubeController.c **** *   Returns: UINT64 with all buttons and joysticks
+  12:GameCubeController.c **** *
+  13:GameCubeController.c **** *   
+  14:GameCubeController.c **** *   ##MSB## (bit 60) START,Y,X,B,A,1,L,R,RL,D-UP,D-DOWN,D-RIGHT,D-LEFT,
+  15:GameCubeController.c **** *                    Joystick Xval(8bit), Joystick Yval(8bit), 
+  16:GameCubeController.c **** *                    C-Stick Xval(8bit), C-stick Yval(8-bit), 
+  17:GameCubeController.c **** *                    Left buttonval(8-bit), Right buttonval(8-bit) ##LSB##(bit 0)
+  18:GameCubeController.c **** *
+  19:GameCubeController.c **** *   Warning: -interrupts are disabled for most of the function
+  20:GameCubeController.c **** *            -Names of Input/output need to be Controller1 and Controller2
+  21:GameCubeController.c **** *   
+  22:GameCubeController.c **** */
+  23:GameCubeController.c **** uint64 readController(uint8 controller, uint8 rumble) //controller 1 -> 1, anything else: 2 ; rumbl
+  24:GameCubeController.c **** {
+  28              		.loc 1 24 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 72
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              	.LVL0:
+  33 0000 70B5     		push	{r4, r5, r6, lr}
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 2
+
+
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 4, -16
+  36              		.cfi_offset 5, -12
+  37              		.cfi_offset 6, -8
+  38              		.cfi_offset 14, -4
+  39 0002 92B0     		sub	sp, sp, #72
+  40              		.cfi_def_cfa_offset 88
+  41              	.LVL1:
+  25:GameCubeController.c ****     //defines
+  26:GameCubeController.c ****     #define initNoRumble 0b0100000000000011000000001
+  27:GameCubeController.c ****     #define initRumble   0b0100000000000011000000010
+  28:GameCubeController.c ****     
+  29:GameCubeController.c ****     //vars
+  30:GameCubeController.c ****     uint32 sendingSequence;              //used to temp store init sequence and send
+  31:GameCubeController.c ****     _Bool readBuffer[61];                //buffer to store readings from controller
+  32:GameCubeController.c ****     uint64 formattedData = 0;            //formatted data to return
+  33:GameCubeController.c ****     reg32 *controllerDR, controllerMASK; //used to store mem location of controller data pins (you 
+  34:GameCubeController.c ****     int16 counter = 0;                   //declare before use (cycles)
+  35:GameCubeController.c ****     
+  36:GameCubeController.c ****     //perform checks for settings(controller/rumble)
+  37:GameCubeController.c ****     if(controller == 1)
+  42              		.loc 1 37 0
+  43 0004 0128     		cmp	r0, #1
+  44 0006 02D1     		bne	.L2
+  45              	.LVL2:
+  38:GameCubeController.c ****     {
+  39:GameCubeController.c ****         controllerDR = &Controller1_DR;
+  40:GameCubeController.c ****         controllerMASK = Controller1_MASK;
+  46              		.loc 1 40 0
+  47 0008 0123     		movs	r3, #1
+  48 000a 0193     		str	r3, [sp, #4]
+  49 000c 01E0     		b	.L3
+  50              	.LVL3:
+  51              	.L2:
+  41:GameCubeController.c ****     }
+  42:GameCubeController.c ****     else
+  43:GameCubeController.c ****     {
+  44:GameCubeController.c ****         controllerDR = &Controller2_DR;
+  45:GameCubeController.c ****         controllerMASK = Controller2_MASK;
+  52              		.loc 1 45 0
+  53 000e 0223     		movs	r3, #2
+  54 0010 0193     		str	r3, [sp, #4]
+  55              	.L3:
+  46:GameCubeController.c ****     }
+  47:GameCubeController.c ****     
+  48:GameCubeController.c ****     if(rumble == 0)
+  56              		.loc 1 48 0
+  57 0012 0029     		cmp	r1, #0
+  58 0014 01D1     		bne	.L27
+  49:GameCubeController.c ****     {
+  50:GameCubeController.c ****         sendingSequence = initNoRumble;
+  59              		.loc 1 50 0
+  60 0016 5D4E     		ldr	r6, .L28
+  61 0018 00E0     		b	.L4
+  62              	.L27:
+  51:GameCubeController.c ****     }
+  52:GameCubeController.c ****     else
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 3
+
+
+  53:GameCubeController.c ****     {
+  54:GameCubeController.c ****         sendingSequence = initRumble;
+  63              		.loc 1 54 0
+  64 001a 5D4E     		ldr	r6, .L28+4
+  65              	.L4:
+  66              	.LVL4:
+  55:GameCubeController.c ****     }
+  56:GameCubeController.c ****     
+  57:GameCubeController.c ****     //##time sensitive code##
+  58:GameCubeController.c ****     CyGlobalIntDisable;
+  67              		.loc 1 58 0
+  68              		.syntax divided
+  69              	@ 58 "GameCubeController.c" 1
+  70 001c 72B6     		CPSID   i
+  71              	@ 0 "" 2
+  72              	.LVL5:
+  73              		.thumb
+  74              		.syntax unified
+  75              	.LBB2:
+  59:GameCubeController.c ****     
+  60:GameCubeController.c ****     //This bit-bangs the 24 bits to the controller
+  61:GameCubeController.c ****     for(int i = 24; i >= 0; --i)
+  76              		.loc 1 61 0
+  77 001e 1824     		movs	r4, #24
+  78 0020 20E0     		b	.L5
+  79              	.LVL6:
+  80              	.L8:
+  62:GameCubeController.c ****     {
+  63:GameCubeController.c ****         
+  64:GameCubeController.c ****         if(((sendingSequence >> i) & 0x000001)  == 0)   //ZERO sequence
+  81              		.loc 1 64 0
+  82 0022 3300     		movs	r3, r6
+  83 0024 E340     		lsrs	r3, r3, r4
+  84 0026 DB07     		lsls	r3, r3, #31
+  85 0028 0CD4     		bmi	.L6
+  65:GameCubeController.c ****         {
+  66:GameCubeController.c ****             *controllerDR &= ~controllerMASK;
+  86              		.loc 1 66 0
+  87 002a 019A     		ldr	r2, [sp, #4]
+  88 002c 594D     		ldr	r5, .L28+8
+  89 002e 2B68     		ldr	r3, [r5]
+  90 0030 9343     		bics	r3, r2
+  91 0032 2B60     		str	r3, [r5]
+  67:GameCubeController.c ****             CyDelayCycles(50);
+  92              		.loc 1 67 0
+  93 0034 3220     		movs	r0, #50
+  94 0036 FFF7FEFF 		bl	CyDelayCycles
+  95              	.LVL7:
+  68:GameCubeController.c ****             *controllerDR |= controllerMASK;
+  96              		.loc 1 68 0
+  97 003a 019A     		ldr	r2, [sp, #4]
+  98 003c 2B68     		ldr	r3, [r5]
+  99 003e 1343     		orrs	r3, r2
+ 100 0040 2B60     		str	r3, [r5]
+ 101 0042 0EE0     		b	.L7
+ 102              	.L6:
+  69:GameCubeController.c ****             
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 4
+
+
+  70:GameCubeController.c ****             
+  71:GameCubeController.c ****         }
+  72:GameCubeController.c ****         else                                     //ONE sequence
+  73:GameCubeController.c ****         {
+  74:GameCubeController.c ****             *controllerDR &= ~controllerMASK;
+ 103              		.loc 1 74 0
+ 104 0044 019A     		ldr	r2, [sp, #4]
+ 105 0046 534D     		ldr	r5, .L28+8
+ 106 0048 2B68     		ldr	r3, [r5]
+ 107 004a 9343     		bics	r3, r2
+ 108 004c 2B60     		str	r3, [r5]
+  75:GameCubeController.c ****             CyDelayCycles(1);
+ 109              		.loc 1 75 0
+ 110 004e 0120     		movs	r0, #1
+ 111 0050 FFF7FEFF 		bl	CyDelayCycles
+ 112              	.LVL8:
+  76:GameCubeController.c ****             *controllerDR |= controllerMASK;
+ 113              		.loc 1 76 0
+ 114 0054 019A     		ldr	r2, [sp, #4]
+ 115 0056 2B68     		ldr	r3, [r5]
+ 116 0058 1343     		orrs	r3, r2
+ 117 005a 2B60     		str	r3, [r5]
+  77:GameCubeController.c ****             CyDelayCycles(39);
+ 118              		.loc 1 77 0
+ 119 005c 2720     		movs	r0, #39
+ 120 005e FFF7FEFF 		bl	CyDelayCycles
+ 121              	.LVL9:
+ 122              	.L7:
+  61:GameCubeController.c ****     {
+ 123              		.loc 1 61 0 discriminator 2
+ 124 0062 013C     		subs	r4, r4, #1
+ 125              	.LVL10:
+ 126              	.L5:
+  61:GameCubeController.c ****     {
+ 127              		.loc 1 61 0 is_stmt 0 discriminator 1
+ 128 0064 002C     		cmp	r4, #0
+ 129 0066 DCDA     		bge	.L8
+ 130              	.LBE2:
+  78:GameCubeController.c ****         }
+  79:GameCubeController.c ****     }
+  80:GameCubeController.c ****     
+  81:GameCubeController.c ****     //this reads the returned 60 bytes (only button data)
+  82:GameCubeController.c ****     CyDelayCycles(310);                          //sync to start bit
+ 131              		.loc 1 82 0 is_stmt 1
+ 132 0068 9B20     		movs	r0, #155
+ 133 006a 4000     		lsls	r0, r0, #1
+ 134 006c FFF7FEFF 		bl	CyDelayCycles
+ 135              	.LVL11:
+  34:GameCubeController.c ****     
+ 136              		.loc 1 34 0
+ 137 0070 0024     		movs	r4, #0
+ 138              	.LVL12:
+  83:GameCubeController.c ****     for(counter; counter <= 8; ++counter)
+ 139              		.loc 1 83 0
+ 140 0072 0AE0     		b	.L9
+ 141              	.LVL13:
+ 142              	.L10:
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 5
+
+
+  84:GameCubeController.c ****     {
+  85:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 143              		.loc 1 85 0 discriminator 2
+ 144 0074 FFF7FEFF 		bl	Controller1_Read
+ 145              	.LVL14:
+ 146 0078 431E     		subs	r3, r0, #1
+ 147 007a 9841     		sbcs	r0, r0, r3
+ 148 007c 02AB     		add	r3, sp, #8
+ 149 007e 1855     		strb	r0, [r3, r4]
+  86:GameCubeController.c ****         CyDelayCycles(50);                       //sync to next bit
+ 150              		.loc 1 86 0 discriminator 2
+ 151 0080 3220     		movs	r0, #50
+ 152 0082 FFF7FEFF 		bl	CyDelayCycles
+ 153              	.LVL15:
+  83:GameCubeController.c ****     for(counter; counter <= 8; ++counter)
+ 154              		.loc 1 83 0 discriminator 2
+ 155 0086 0134     		adds	r4, r4, #1
+ 156              	.LVL16:
+ 157 0088 24B2     		sxth	r4, r4
+ 158              	.LVL17:
+ 159              	.L9:
+  83:GameCubeController.c ****     for(counter; counter <= 8; ++counter)
+ 160              		.loc 1 83 0 is_stmt 0 discriminator 1
+ 161 008a 082C     		cmp	r4, #8
+ 162 008c F2DD     		ble	.L10
+  87:GameCubeController.c ****     }
+  88:GameCubeController.c ****     
+  89:GameCubeController.c ****     CyDelayCycles(5);                            //resync
+ 163              		.loc 1 89 0 is_stmt 1
+ 164 008e 0520     		movs	r0, #5
+ 165 0090 FFF7FEFF 		bl	CyDelayCycles
+ 166              	.LVL18:
+  90:GameCubeController.c ****     for(counter; counter <= 17; ++counter)
+ 167              		.loc 1 90 0
+ 168 0094 0AE0     		b	.L11
+ 169              	.L12:
+  91:GameCubeController.c ****     {
+  92:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 170              		.loc 1 92 0 discriminator 2
+ 171 0096 FFF7FEFF 		bl	Controller1_Read
+ 172              	.LVL19:
+ 173 009a 431E     		subs	r3, r0, #1
+ 174 009c 9841     		sbcs	r0, r0, r3
+ 175 009e 02AB     		add	r3, sp, #8
+ 176 00a0 1855     		strb	r0, [r3, r4]
+  93:GameCubeController.c ****         CyDelayCycles(50);
+ 177              		.loc 1 93 0 discriminator 2
+ 178 00a2 3220     		movs	r0, #50
+ 179 00a4 FFF7FEFF 		bl	CyDelayCycles
+ 180              	.LVL20:
+  90:GameCubeController.c ****     for(counter; counter <= 17; ++counter)
+ 181              		.loc 1 90 0 discriminator 2
+ 182 00a8 0134     		adds	r4, r4, #1
+ 183              	.LVL21:
+ 184 00aa 24B2     		sxth	r4, r4
+ 185              	.LVL22:
+ 186              	.L11:
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 6
+
+
+  90:GameCubeController.c ****     for(counter; counter <= 17; ++counter)
+ 187              		.loc 1 90 0 is_stmt 0 discriminator 1
+ 188 00ac 112C     		cmp	r4, #17
+ 189 00ae F2DD     		ble	.L12
+  94:GameCubeController.c ****     }
+  95:GameCubeController.c ****     
+  96:GameCubeController.c ****     CyDelayCycles(5);
+ 190              		.loc 1 96 0 is_stmt 1
+ 191 00b0 0520     		movs	r0, #5
+ 192 00b2 FFF7FEFF 		bl	CyDelayCycles
+ 193              	.LVL23:
+  97:GameCubeController.c ****     for(counter; counter <= 26; ++counter)
+ 194              		.loc 1 97 0
+ 195 00b6 0AE0     		b	.L13
+ 196              	.L14:
+  98:GameCubeController.c ****     {
+  99:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 197              		.loc 1 99 0 discriminator 2
+ 198 00b8 FFF7FEFF 		bl	Controller1_Read
+ 199              	.LVL24:
+ 200 00bc 431E     		subs	r3, r0, #1
+ 201 00be 9841     		sbcs	r0, r0, r3
+ 202 00c0 02AB     		add	r3, sp, #8
+ 203 00c2 1855     		strb	r0, [r3, r4]
+ 100:GameCubeController.c ****         CyDelayCycles(50);
+ 204              		.loc 1 100 0 discriminator 2
+ 205 00c4 3220     		movs	r0, #50
+ 206 00c6 FFF7FEFF 		bl	CyDelayCycles
+ 207              	.LVL25:
+  97:GameCubeController.c ****     for(counter; counter <= 26; ++counter)
+ 208              		.loc 1 97 0 discriminator 2
+ 209 00ca 0134     		adds	r4, r4, #1
+ 210              	.LVL26:
+ 211 00cc 24B2     		sxth	r4, r4
+ 212              	.LVL27:
+ 213              	.L13:
+  97:GameCubeController.c ****     for(counter; counter <= 26; ++counter)
+ 214              		.loc 1 97 0 is_stmt 0 discriminator 1
+ 215 00ce 1A2C     		cmp	r4, #26
+ 216 00d0 F2DD     		ble	.L14
+ 101:GameCubeController.c ****     }
+ 102:GameCubeController.c ****     
+ 103:GameCubeController.c ****     CyDelayCycles(5);
+ 217              		.loc 1 103 0 is_stmt 1
+ 218 00d2 0520     		movs	r0, #5
+ 219 00d4 FFF7FEFF 		bl	CyDelayCycles
+ 220              	.LVL28:
+ 104:GameCubeController.c ****     for(counter; counter <= 35; ++counter)
+ 221              		.loc 1 104 0
+ 222 00d8 0AE0     		b	.L15
+ 223              	.L16:
+ 105:GameCubeController.c ****     {
+ 106:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 224              		.loc 1 106 0 discriminator 2
+ 225 00da FFF7FEFF 		bl	Controller1_Read
+ 226              	.LVL29:
+ 227 00de 431E     		subs	r3, r0, #1
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 7
+
+
+ 228 00e0 9841     		sbcs	r0, r0, r3
+ 229 00e2 02AB     		add	r3, sp, #8
+ 230 00e4 1855     		strb	r0, [r3, r4]
+ 107:GameCubeController.c ****         CyDelayCycles(50);
+ 231              		.loc 1 107 0 discriminator 2
+ 232 00e6 3220     		movs	r0, #50
+ 233 00e8 FFF7FEFF 		bl	CyDelayCycles
+ 234              	.LVL30:
+ 104:GameCubeController.c ****     for(counter; counter <= 35; ++counter)
+ 235              		.loc 1 104 0 discriminator 2
+ 236 00ec 0134     		adds	r4, r4, #1
+ 237              	.LVL31:
+ 238 00ee 24B2     		sxth	r4, r4
+ 239              	.LVL32:
+ 240              	.L15:
+ 104:GameCubeController.c ****     for(counter; counter <= 35; ++counter)
+ 241              		.loc 1 104 0 is_stmt 0 discriminator 1
+ 242 00f0 232C     		cmp	r4, #35
+ 243 00f2 F2DD     		ble	.L16
+ 108:GameCubeController.c ****     }
+ 109:GameCubeController.c ****     
+ 110:GameCubeController.c ****     CyDelayCycles(5);
+ 244              		.loc 1 110 0 is_stmt 1
+ 245 00f4 0520     		movs	r0, #5
+ 246 00f6 FFF7FEFF 		bl	CyDelayCycles
+ 247              	.LVL33:
+ 111:GameCubeController.c ****     for(counter; counter <= 44; ++counter)
+ 248              		.loc 1 111 0
+ 249 00fa 0AE0     		b	.L17
+ 250              	.L18:
+ 112:GameCubeController.c ****     {
+ 113:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 251              		.loc 1 113 0 discriminator 2
+ 252 00fc FFF7FEFF 		bl	Controller1_Read
+ 253              	.LVL34:
+ 254 0100 431E     		subs	r3, r0, #1
+ 255 0102 9841     		sbcs	r0, r0, r3
+ 256 0104 02AB     		add	r3, sp, #8
+ 257 0106 1855     		strb	r0, [r3, r4]
+ 114:GameCubeController.c ****         CyDelayCycles(50);
+ 258              		.loc 1 114 0 discriminator 2
+ 259 0108 3220     		movs	r0, #50
+ 260 010a FFF7FEFF 		bl	CyDelayCycles
+ 261              	.LVL35:
+ 111:GameCubeController.c ****     for(counter; counter <= 44; ++counter)
+ 262              		.loc 1 111 0 discriminator 2
+ 263 010e 0134     		adds	r4, r4, #1
+ 264              	.LVL36:
+ 265 0110 24B2     		sxth	r4, r4
+ 266              	.LVL37:
+ 267              	.L17:
+ 111:GameCubeController.c ****     for(counter; counter <= 44; ++counter)
+ 268              		.loc 1 111 0 is_stmt 0 discriminator 1
+ 269 0112 2C2C     		cmp	r4, #44
+ 270 0114 F2DD     		ble	.L18
+ 115:GameCubeController.c ****     }
+ 116:GameCubeController.c ****     
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 8
+
+
+ 117:GameCubeController.c ****     CyDelayCycles(5);
+ 271              		.loc 1 117 0 is_stmt 1
+ 272 0116 0520     		movs	r0, #5
+ 273 0118 FFF7FEFF 		bl	CyDelayCycles
+ 274              	.LVL38:
+ 118:GameCubeController.c ****     for(counter; counter <= 53; ++counter)
+ 275              		.loc 1 118 0
+ 276 011c 0AE0     		b	.L19
+ 277              	.L20:
+ 119:GameCubeController.c ****     {
+ 120:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 278              		.loc 1 120 0 discriminator 2
+ 279 011e FFF7FEFF 		bl	Controller1_Read
+ 280              	.LVL39:
+ 281 0122 431E     		subs	r3, r0, #1
+ 282 0124 9841     		sbcs	r0, r0, r3
+ 283 0126 02AB     		add	r3, sp, #8
+ 284 0128 1855     		strb	r0, [r3, r4]
+ 121:GameCubeController.c ****         CyDelayCycles(50);
+ 285              		.loc 1 121 0 discriminator 2
+ 286 012a 3220     		movs	r0, #50
+ 287 012c FFF7FEFF 		bl	CyDelayCycles
+ 288              	.LVL40:
+ 118:GameCubeController.c ****     for(counter; counter <= 53; ++counter)
+ 289              		.loc 1 118 0 discriminator 2
+ 290 0130 0134     		adds	r4, r4, #1
+ 291              	.LVL41:
+ 292 0132 24B2     		sxth	r4, r4
+ 293              	.LVL42:
+ 294              	.L19:
+ 118:GameCubeController.c ****     for(counter; counter <= 53; ++counter)
+ 295              		.loc 1 118 0 is_stmt 0 discriminator 1
+ 296 0134 352C     		cmp	r4, #53
+ 297 0136 F2DD     		ble	.L20
+ 122:GameCubeController.c ****     }
+ 123:GameCubeController.c ****     
+ 124:GameCubeController.c ****     CyDelayCycles(5);
+ 298              		.loc 1 124 0 is_stmt 1
+ 299 0138 0520     		movs	r0, #5
+ 300 013a FFF7FEFF 		bl	CyDelayCycles
+ 301              	.LVL43:
+ 125:GameCubeController.c ****     for(counter; counter <= 60; ++counter)
+ 302              		.loc 1 125 0
+ 303 013e 0AE0     		b	.L21
+ 304              	.L22:
+ 126:GameCubeController.c ****     {
+ 127:GameCubeController.c ****         readBuffer[counter] = Controller1_Read();
+ 305              		.loc 1 127 0 discriminator 2
+ 306 0140 FFF7FEFF 		bl	Controller1_Read
+ 307              	.LVL44:
+ 308 0144 431E     		subs	r3, r0, #1
+ 309 0146 9841     		sbcs	r0, r0, r3
+ 310 0148 02AB     		add	r3, sp, #8
+ 311 014a 1855     		strb	r0, [r3, r4]
+ 128:GameCubeController.c ****         CyDelayCycles(50);
+ 312              		.loc 1 128 0 discriminator 2
+ 313 014c 3220     		movs	r0, #50
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 9
+
+
+ 314 014e FFF7FEFF 		bl	CyDelayCycles
+ 315              	.LVL45:
+ 125:GameCubeController.c ****     for(counter; counter <= 60; ++counter)
+ 316              		.loc 1 125 0 discriminator 2
+ 317 0152 0134     		adds	r4, r4, #1
+ 318              	.LVL46:
+ 319 0154 24B2     		sxth	r4, r4
+ 320              	.LVL47:
+ 321              	.L21:
+ 125:GameCubeController.c ****     for(counter; counter <= 60; ++counter)
+ 322              		.loc 1 125 0 is_stmt 0 discriminator 1
+ 323 0156 3C2C     		cmp	r4, #60
+ 324 0158 F2DD     		ble	.L22
+ 129:GameCubeController.c ****     }
+ 130:GameCubeController.c ****     //### end of time sensitive code###
+ 131:GameCubeController.c ****     
+ 132:GameCubeController.c ****     CyGlobalIntEnable;
+ 325              		.loc 1 132 0 is_stmt 1
+ 326              		.syntax divided
+ 327              	@ 132 "GameCubeController.c" 1
+ 328 015a 62B6     		CPSIE   i
+ 329              	@ 0 "" 2
+ 330              	.LVL48:
+ 331              		.thumb
+ 332              		.syntax unified
+ 333              	.LBB3:
+ 133:GameCubeController.c ****     
+ 134:GameCubeController.c ****     //formatting it to return
+ 135:GameCubeController.c ****     for(int i = 0; i<=60; ++i)
+ 334              		.loc 1 135 0
+ 335 015c 0023     		movs	r3, #0
+ 336              	.LBE3:
+  32:GameCubeController.c ****     reg32 *controllerDR, controllerMASK; //used to store mem location of controller data pins (you 
+ 337              		.loc 1 32 0
+ 338 015e 0020     		movs	r0, #0
+ 339 0160 0021     		movs	r1, #0
+ 340              	.LBB4:
+ 341              		.loc 1 135 0
+ 342 0162 0FE0     		b	.L23
+ 343              	.LVL49:
+ 344              	.L26:
+ 136:GameCubeController.c ****     {
+ 137:GameCubeController.c ****         if(readBuffer[i] == 1)
+ 345              		.loc 1 137 0
+ 346 0164 02AA     		add	r2, sp, #8
+ 347 0166 D25C     		ldrb	r2, [r2, r3]
+ 348 0168 002A     		cmp	r2, #0
+ 349 016a 08D0     		beq	.L24
+ 138:GameCubeController.c ****         {
+ 139:GameCubeController.c ****             formattedData = ((formattedData <<1) | 0x0000000000000001);
+ 350              		.loc 1 139 0
+ 351 016c 0400     		movs	r4, r0
+ 352 016e 0D00     		movs	r5, r1
+ 353 0170 2418     		adds	r4, r4, r0
+ 354 0172 4D41     		adcs	r5, r5, r1
+ 355 0174 0122     		movs	r2, #1
+ 356 0176 2243     		orrs	r2, r4
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 10
+
+
+ 357 0178 1000     		movs	r0, r2
+ 358              	.LVL50:
+ 359 017a 2900     		movs	r1, r5
+ 360              	.LVL51:
+ 361 017c 01E0     		b	.L25
+ 362              	.L24:
+ 140:GameCubeController.c ****         }
+ 141:GameCubeController.c ****         else
+ 142:GameCubeController.c ****         {
+ 143:GameCubeController.c ****             formattedData = formattedData << 1;
+ 363              		.loc 1 143 0
+ 364 017e 0018     		adds	r0, r0, r0
+ 365 0180 4941     		adcs	r1, r1, r1
+ 366              	.LVL52:
+ 367              	.L25:
+ 135:GameCubeController.c ****     {
+ 368              		.loc 1 135 0 discriminator 2
+ 369 0182 0133     		adds	r3, r3, #1
+ 370              	.LVL53:
+ 371              	.L23:
+ 135:GameCubeController.c ****     {
+ 372              		.loc 1 135 0 is_stmt 0 discriminator 1
+ 373 0184 3C2B     		cmp	r3, #60
+ 374 0186 EDDD     		ble	.L26
+ 375              	.LBE4:
+ 144:GameCubeController.c ****         }
+ 145:GameCubeController.c ****         
+ 146:GameCubeController.c ****     }
+ 147:GameCubeController.c ****     
+ 148:GameCubeController.c ****     return formattedData;
+ 149:GameCubeController.c **** }...
+ 376              		.loc 1 149 0 is_stmt 1
+ 377 0188 12B0     		add	sp, sp, #72
+ 378              		@ sp needed
+ 379              	.LVL54:
+ 380 018a 70BD     		pop	{r4, r5, r6, pc}
+ 381              	.L29:
+ 382              		.align	2
+ 383              	.L28:
+ 384 018c 01068000 		.word	8390145
+ 385 0190 02068000 		.word	8390146
+ 386 0194 00010440 		.word	1074004224
+ 387              		.cfi_endproc
+ 388              	.LFE33:
+ 389              		.size	readController, .-readController
+ 390              		.text
+ 391              	.Letext0:
+ 392              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 393              		.file 3 "Generated_Source\\PSoC4/CyLib.h"
+ 394              		.file 4 "Generated_Source\\PSoC4/Controller1.h"
+ 395              		.section	.debug_info,"",%progbits
+ 396              	.Ldebug_info0:
+ 397 0000 48030000 		.4byte	0x348
+ 398 0004 0400     		.2byte	0x4
+ 399 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 400 000a 04       		.byte	0x4
+ 401 000b 01       		.uleb128 0x1
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 11
+
+
+ 402 000c 2D010000 		.4byte	.LASF30
+ 403 0010 0C       		.byte	0xc
+ 404 0011 D7000000 		.4byte	.LASF31
+ 405 0015 2C000000 		.4byte	.LASF32
+ 406 0019 18000000 		.4byte	.Ldebug_ranges0+0x18
+ 407 001d 00000000 		.4byte	0
+ 408 0021 00000000 		.4byte	.Ldebug_line0
+ 409 0025 02       		.uleb128 0x2
+ 410 0026 01       		.byte	0x1
+ 411 0027 06       		.byte	0x6
+ 412 0028 1F020000 		.4byte	.LASF0
+ 413 002c 02       		.uleb128 0x2
+ 414 002d 01       		.byte	0x1
+ 415 002e 08       		.byte	0x8
+ 416 002f 87000000 		.4byte	.LASF1
+ 417 0033 02       		.uleb128 0x2
+ 418 0034 02       		.byte	0x2
+ 419 0035 05       		.byte	0x5
+ 420 0036 EF010000 		.4byte	.LASF2
+ 421 003a 02       		.uleb128 0x2
+ 422 003b 02       		.byte	0x2
+ 423 003c 07       		.byte	0x7
+ 424 003d BD000000 		.4byte	.LASF3
+ 425 0041 02       		.uleb128 0x2
+ 426 0042 04       		.byte	0x4
+ 427 0043 05       		.byte	0x5
+ 428 0044 FF010000 		.4byte	.LASF4
+ 429 0048 02       		.uleb128 0x2
+ 430 0049 04       		.byte	0x4
+ 431 004a 07       		.byte	0x7
+ 432 004b AB000000 		.4byte	.LASF5
+ 433 004f 02       		.uleb128 0x2
+ 434 0050 08       		.byte	0x8
+ 435 0051 05       		.byte	0x5
+ 436 0052 C4010000 		.4byte	.LASF6
+ 437 0056 02       		.uleb128 0x2
+ 438 0057 08       		.byte	0x8
+ 439 0058 07       		.byte	0x7
+ 440 0059 07010000 		.4byte	.LASF7
+ 441 005d 03       		.uleb128 0x3
+ 442 005e 04       		.byte	0x4
+ 443 005f 05       		.byte	0x5
+ 444 0060 696E7400 		.ascii	"int\000"
+ 445 0064 02       		.uleb128 0x2
+ 446 0065 04       		.byte	0x4
+ 447 0066 07       		.byte	0x7
+ 448 0067 FA000000 		.4byte	.LASF8
+ 449 006b 04       		.uleb128 0x4
+ 450 006c F9010000 		.4byte	.LASF9
+ 451 0070 02       		.byte	0x2
+ 452 0071 F701     		.2byte	0x1f7
+ 453 0073 2C000000 		.4byte	0x2c
+ 454 0077 04       		.uleb128 0x4
+ 455 0078 EC000000 		.4byte	.LASF10
+ 456 007c 02       		.byte	0x2
+ 457 007d F901     		.2byte	0x1f9
+ 458 007f 48000000 		.4byte	0x48
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 12
+
+
+ 459 0083 04       		.uleb128 0x4
+ 460 0084 A5000000 		.4byte	.LASF11
+ 461 0088 02       		.byte	0x2
+ 462 0089 FB01     		.2byte	0x1fb
+ 463 008b 33000000 		.4byte	0x33
+ 464 008f 02       		.uleb128 0x2
+ 465 0090 04       		.byte	0x4
+ 466 0091 04       		.byte	0x4
+ 467 0092 79000000 		.4byte	.LASF12
+ 468 0096 02       		.uleb128 0x2
+ 469 0097 08       		.byte	0x8
+ 470 0098 04       		.byte	0x4
+ 471 0099 D0000000 		.4byte	.LASF13
+ 472 009d 04       		.uleb128 0x4
+ 473 009e 25000000 		.4byte	.LASF14
+ 474 00a2 02       		.byte	0x2
+ 475 00a3 0302     		.2byte	0x203
+ 476 00a5 56000000 		.4byte	0x56
+ 477 00a9 02       		.uleb128 0x2
+ 478 00aa 01       		.byte	0x1
+ 479 00ab 08       		.byte	0x8
+ 480 00ac D2010000 		.4byte	.LASF15
+ 481 00b0 04       		.uleb128 0x4
+ 482 00b1 0E000000 		.4byte	.LASF16
+ 483 00b5 02       		.byte	0x2
+ 484 00b6 A302     		.2byte	0x2a3
+ 485 00b8 BC000000 		.4byte	0xbc
+ 486 00bc 05       		.uleb128 0x5
+ 487 00bd 77000000 		.4byte	0x77
+ 488 00c1 02       		.uleb128 0x2
+ 489 00c2 08       		.byte	0x8
+ 490 00c3 04       		.byte	0x4
+ 491 00c4 13020000 		.4byte	.LASF17
+ 492 00c8 02       		.uleb128 0x2
+ 493 00c9 04       		.byte	0x4
+ 494 00ca 07       		.byte	0x7
+ 495 00cb BB010000 		.4byte	.LASF18
+ 496 00cf 06       		.uleb128 0x6
+ 497 00d0 39020000 		.4byte	.LASF33
+ 498 00d4 01       		.byte	0x1
+ 499 00d5 17       		.byte	0x17
+ 500 00d6 9D000000 		.4byte	0x9d
+ 501 00da 00000000 		.4byte	.LFB33
+ 502 00de 98010000 		.4byte	.LFE33-.LFB33
+ 503 00e2 01       		.uleb128 0x1
+ 504 00e3 9C       		.byte	0x9c
+ 505 00e4 18030000 		.4byte	0x318
+ 506 00e8 07       		.uleb128 0x7
+ 507 00e9 D7010000 		.4byte	.LASF19
+ 508 00ed 01       		.byte	0x1
+ 509 00ee 17       		.byte	0x17
+ 510 00ef 6B000000 		.4byte	0x6b
+ 511 00f3 00000000 		.4byte	.LLST0
+ 512 00f7 07       		.uleb128 0x7
+ 513 00f8 F3000000 		.4byte	.LASF20
+ 514 00fc 01       		.byte	0x1
+ 515 00fd 17       		.byte	0x17
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 13
+
+
+ 516 00fe 6B000000 		.4byte	0x6b
+ 517 0102 21000000 		.4byte	.LLST1
+ 518 0106 08       		.uleb128 0x8
+ 519 0107 95000000 		.4byte	.LASF21
+ 520 010b 01       		.byte	0x1
+ 521 010c 1E       		.byte	0x1e
+ 522 010d 77000000 		.4byte	0x77
+ 523 0111 42000000 		.4byte	.LLST2
+ 524 0115 09       		.uleb128 0x9
+ 525 0116 08020000 		.4byte	.LASF22
+ 526 011a 01       		.byte	0x1
+ 527 011b 1F       		.byte	0x1f
+ 528 011c 18030000 		.4byte	0x318
+ 529 0120 03       		.uleb128 0x3
+ 530 0121 91       		.byte	0x91
+ 531 0122 B07F     		.sleb128 -80
+ 532 0124 08       		.uleb128 0x8
+ 533 0125 2B020000 		.4byte	.LASF23
+ 534 0129 01       		.byte	0x1
+ 535 012a 20       		.byte	0x20
+ 536 012b 9D000000 		.4byte	0x9d
+ 537 012f 55000000 		.4byte	.LLST3
+ 538 0133 0A       		.uleb128 0xa
+ 539 0134 E2010000 		.4byte	.LASF24
+ 540 0138 01       		.byte	0x1
+ 541 0139 21       		.byte	0x21
+ 542 013a 2F030000 		.4byte	0x32f
+ 543 013e 00010440 		.4byte	0x40040100
+ 544 0142 09       		.uleb128 0x9
+ 545 0143 1E010000 		.4byte	.LASF25
+ 546 0147 01       		.byte	0x1
+ 547 0148 21       		.byte	0x21
+ 548 0149 B0000000 		.4byte	0xb0
+ 549 014d 03       		.uleb128 0x3
+ 550 014e 91       		.byte	0x91
+ 551 014f AC7F     		.sleb128 -84
+ 552 0151 08       		.uleb128 0x8
+ 553 0152 7F000000 		.4byte	.LASF26
+ 554 0156 01       		.byte	0x1
+ 555 0157 22       		.byte	0x22
+ 556 0158 83000000 		.4byte	0x83
+ 557 015c 91000000 		.4byte	.LLST4
+ 558 0160 0B       		.uleb128 0xb
+ 559 0161 1E000000 		.4byte	.LBB2
+ 560 0165 4A000000 		.4byte	.LBE2-.LBB2
+ 561 0169 B2010000 		.4byte	0x1b2
+ 562 016d 0C       		.uleb128 0xc
+ 563 016e 6900     		.ascii	"i\000"
+ 564 0170 01       		.byte	0x1
+ 565 0171 3D       		.byte	0x3d
+ 566 0172 5D000000 		.4byte	0x5d
+ 567 0176 FD000000 		.4byte	.LLST5
+ 568 017a 0D       		.uleb128 0xd
+ 569 017b 3A000000 		.4byte	.LVL7
+ 570 017f 35030000 		.4byte	0x335
+ 571 0183 8E010000 		.4byte	0x18e
+ 572 0187 0E       		.uleb128 0xe
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 14
+
+
+ 573 0188 01       		.uleb128 0x1
+ 574 0189 50       		.byte	0x50
+ 575 018a 02       		.uleb128 0x2
+ 576 018b 08       		.byte	0x8
+ 577 018c 32       		.byte	0x32
+ 578 018d 00       		.byte	0
+ 579 018e 0D       		.uleb128 0xd
+ 580 018f 54000000 		.4byte	.LVL8
+ 581 0193 35030000 		.4byte	0x335
+ 582 0197 A1010000 		.4byte	0x1a1
+ 583 019b 0E       		.uleb128 0xe
+ 584 019c 01       		.uleb128 0x1
+ 585 019d 50       		.byte	0x50
+ 586 019e 01       		.uleb128 0x1
+ 587 019f 31       		.byte	0x31
+ 588 01a0 00       		.byte	0
+ 589 01a1 0F       		.uleb128 0xf
+ 590 01a2 62000000 		.4byte	.LVL9
+ 591 01a6 35030000 		.4byte	0x335
+ 592 01aa 0E       		.uleb128 0xe
+ 593 01ab 01       		.uleb128 0x1
+ 594 01ac 50       		.byte	0x50
+ 595 01ad 02       		.uleb128 0x2
+ 596 01ae 08       		.byte	0x8
+ 597 01af 27       		.byte	0x27
+ 598 01b0 00       		.byte	0
+ 599 01b1 00       		.byte	0
+ 600 01b2 10       		.uleb128 0x10
+ 601 01b3 00000000 		.4byte	.Ldebug_ranges0+0
+ 602 01b7 C9010000 		.4byte	0x1c9
+ 603 01bb 0C       		.uleb128 0xc
+ 604 01bc 6900     		.ascii	"i\000"
+ 605 01be 01       		.byte	0x1
+ 606 01bf 87       		.byte	0x87
+ 607 01c0 5D000000 		.4byte	0x5d
+ 608 01c4 1C010000 		.4byte	.LLST6
+ 609 01c8 00       		.byte	0
+ 610 01c9 0D       		.uleb128 0xd
+ 611 01ca 70000000 		.4byte	.LVL11
+ 612 01ce 35030000 		.4byte	0x335
+ 613 01d2 DE010000 		.4byte	0x1de
+ 614 01d6 0E       		.uleb128 0xe
+ 615 01d7 01       		.uleb128 0x1
+ 616 01d8 50       		.byte	0x50
+ 617 01d9 03       		.uleb128 0x3
+ 618 01da 0A       		.byte	0xa
+ 619 01db 3601     		.2byte	0x136
+ 620 01dd 00       		.byte	0
+ 621 01de 11       		.uleb128 0x11
+ 622 01df 78000000 		.4byte	.LVL14
+ 623 01e3 40030000 		.4byte	0x340
+ 624 01e7 0D       		.uleb128 0xd
+ 625 01e8 86000000 		.4byte	.LVL15
+ 626 01ec 35030000 		.4byte	0x335
+ 627 01f0 FB010000 		.4byte	0x1fb
+ 628 01f4 0E       		.uleb128 0xe
+ 629 01f5 01       		.uleb128 0x1
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 15
+
+
+ 630 01f6 50       		.byte	0x50
+ 631 01f7 02       		.uleb128 0x2
+ 632 01f8 08       		.byte	0x8
+ 633 01f9 32       		.byte	0x32
+ 634 01fa 00       		.byte	0
+ 635 01fb 0D       		.uleb128 0xd
+ 636 01fc 94000000 		.4byte	.LVL18
+ 637 0200 35030000 		.4byte	0x335
+ 638 0204 0E020000 		.4byte	0x20e
+ 639 0208 0E       		.uleb128 0xe
+ 640 0209 01       		.uleb128 0x1
+ 641 020a 50       		.byte	0x50
+ 642 020b 01       		.uleb128 0x1
+ 643 020c 35       		.byte	0x35
+ 644 020d 00       		.byte	0
+ 645 020e 11       		.uleb128 0x11
+ 646 020f 9A000000 		.4byte	.LVL19
+ 647 0213 40030000 		.4byte	0x340
+ 648 0217 0D       		.uleb128 0xd
+ 649 0218 A8000000 		.4byte	.LVL20
+ 650 021c 35030000 		.4byte	0x335
+ 651 0220 2B020000 		.4byte	0x22b
+ 652 0224 0E       		.uleb128 0xe
+ 653 0225 01       		.uleb128 0x1
+ 654 0226 50       		.byte	0x50
+ 655 0227 02       		.uleb128 0x2
+ 656 0228 08       		.byte	0x8
+ 657 0229 32       		.byte	0x32
+ 658 022a 00       		.byte	0
+ 659 022b 0D       		.uleb128 0xd
+ 660 022c B6000000 		.4byte	.LVL23
+ 661 0230 35030000 		.4byte	0x335
+ 662 0234 3E020000 		.4byte	0x23e
+ 663 0238 0E       		.uleb128 0xe
+ 664 0239 01       		.uleb128 0x1
+ 665 023a 50       		.byte	0x50
+ 666 023b 01       		.uleb128 0x1
+ 667 023c 35       		.byte	0x35
+ 668 023d 00       		.byte	0
+ 669 023e 11       		.uleb128 0x11
+ 670 023f BC000000 		.4byte	.LVL24
+ 671 0243 40030000 		.4byte	0x340
+ 672 0247 0D       		.uleb128 0xd
+ 673 0248 CA000000 		.4byte	.LVL25
+ 674 024c 35030000 		.4byte	0x335
+ 675 0250 5B020000 		.4byte	0x25b
+ 676 0254 0E       		.uleb128 0xe
+ 677 0255 01       		.uleb128 0x1
+ 678 0256 50       		.byte	0x50
+ 679 0257 02       		.uleb128 0x2
+ 680 0258 08       		.byte	0x8
+ 681 0259 32       		.byte	0x32
+ 682 025a 00       		.byte	0
+ 683 025b 0D       		.uleb128 0xd
+ 684 025c D8000000 		.4byte	.LVL28
+ 685 0260 35030000 		.4byte	0x335
+ 686 0264 6E020000 		.4byte	0x26e
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 16
+
+
+ 687 0268 0E       		.uleb128 0xe
+ 688 0269 01       		.uleb128 0x1
+ 689 026a 50       		.byte	0x50
+ 690 026b 01       		.uleb128 0x1
+ 691 026c 35       		.byte	0x35
+ 692 026d 00       		.byte	0
+ 693 026e 11       		.uleb128 0x11
+ 694 026f DE000000 		.4byte	.LVL29
+ 695 0273 40030000 		.4byte	0x340
+ 696 0277 0D       		.uleb128 0xd
+ 697 0278 EC000000 		.4byte	.LVL30
+ 698 027c 35030000 		.4byte	0x335
+ 699 0280 8B020000 		.4byte	0x28b
+ 700 0284 0E       		.uleb128 0xe
+ 701 0285 01       		.uleb128 0x1
+ 702 0286 50       		.byte	0x50
+ 703 0287 02       		.uleb128 0x2
+ 704 0288 08       		.byte	0x8
+ 705 0289 32       		.byte	0x32
+ 706 028a 00       		.byte	0
+ 707 028b 0D       		.uleb128 0xd
+ 708 028c FA000000 		.4byte	.LVL33
+ 709 0290 35030000 		.4byte	0x335
+ 710 0294 9E020000 		.4byte	0x29e
+ 711 0298 0E       		.uleb128 0xe
+ 712 0299 01       		.uleb128 0x1
+ 713 029a 50       		.byte	0x50
+ 714 029b 01       		.uleb128 0x1
+ 715 029c 35       		.byte	0x35
+ 716 029d 00       		.byte	0
+ 717 029e 11       		.uleb128 0x11
+ 718 029f 00010000 		.4byte	.LVL34
+ 719 02a3 40030000 		.4byte	0x340
+ 720 02a7 0D       		.uleb128 0xd
+ 721 02a8 0E010000 		.4byte	.LVL35
+ 722 02ac 35030000 		.4byte	0x335
+ 723 02b0 BB020000 		.4byte	0x2bb
+ 724 02b4 0E       		.uleb128 0xe
+ 725 02b5 01       		.uleb128 0x1
+ 726 02b6 50       		.byte	0x50
+ 727 02b7 02       		.uleb128 0x2
+ 728 02b8 08       		.byte	0x8
+ 729 02b9 32       		.byte	0x32
+ 730 02ba 00       		.byte	0
+ 731 02bb 0D       		.uleb128 0xd
+ 732 02bc 1C010000 		.4byte	.LVL38
+ 733 02c0 35030000 		.4byte	0x335
+ 734 02c4 CE020000 		.4byte	0x2ce
+ 735 02c8 0E       		.uleb128 0xe
+ 736 02c9 01       		.uleb128 0x1
+ 737 02ca 50       		.byte	0x50
+ 738 02cb 01       		.uleb128 0x1
+ 739 02cc 35       		.byte	0x35
+ 740 02cd 00       		.byte	0
+ 741 02ce 11       		.uleb128 0x11
+ 742 02cf 22010000 		.4byte	.LVL39
+ 743 02d3 40030000 		.4byte	0x340
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 17
+
+
+ 744 02d7 0D       		.uleb128 0xd
+ 745 02d8 30010000 		.4byte	.LVL40
+ 746 02dc 35030000 		.4byte	0x335
+ 747 02e0 EB020000 		.4byte	0x2eb
+ 748 02e4 0E       		.uleb128 0xe
+ 749 02e5 01       		.uleb128 0x1
+ 750 02e6 50       		.byte	0x50
+ 751 02e7 02       		.uleb128 0x2
+ 752 02e8 08       		.byte	0x8
+ 753 02e9 32       		.byte	0x32
+ 754 02ea 00       		.byte	0
+ 755 02eb 0D       		.uleb128 0xd
+ 756 02ec 3E010000 		.4byte	.LVL43
+ 757 02f0 35030000 		.4byte	0x335
+ 758 02f4 FE020000 		.4byte	0x2fe
+ 759 02f8 0E       		.uleb128 0xe
+ 760 02f9 01       		.uleb128 0x1
+ 761 02fa 50       		.byte	0x50
+ 762 02fb 01       		.uleb128 0x1
+ 763 02fc 35       		.byte	0x35
+ 764 02fd 00       		.byte	0
+ 765 02fe 11       		.uleb128 0x11
+ 766 02ff 44010000 		.4byte	.LVL44
+ 767 0303 40030000 		.4byte	0x340
+ 768 0307 0F       		.uleb128 0xf
+ 769 0308 52010000 		.4byte	.LVL45
+ 770 030c 35030000 		.4byte	0x335
+ 771 0310 0E       		.uleb128 0xe
+ 772 0311 01       		.uleb128 0x1
+ 773 0312 50       		.byte	0x50
+ 774 0313 02       		.uleb128 0x2
+ 775 0314 08       		.byte	0x8
+ 776 0315 32       		.byte	0x32
+ 777 0316 00       		.byte	0
+ 778 0317 00       		.byte	0
+ 779 0318 12       		.uleb128 0x12
+ 780 0319 28030000 		.4byte	0x328
+ 781 031d 28030000 		.4byte	0x328
+ 782 0321 13       		.uleb128 0x13
+ 783 0322 C8000000 		.4byte	0xc8
+ 784 0326 3C       		.byte	0x3c
+ 785 0327 00       		.byte	0
+ 786 0328 02       		.uleb128 0x2
+ 787 0329 01       		.byte	0x1
+ 788 032a 02       		.byte	0x2
+ 789 032b 48020000 		.4byte	.LASF27
+ 790 032f 14       		.uleb128 0x14
+ 791 0330 04       		.byte	0x4
+ 792 0331 B0000000 		.4byte	0xb0
+ 793 0335 15       		.uleb128 0x15
+ 794 0336 00000000 		.4byte	.LASF28
+ 795 033a 00000000 		.4byte	.LASF28
+ 796 033e 03       		.byte	0x3
+ 797 033f EF       		.byte	0xef
+ 798 0340 15       		.uleb128 0x15
+ 799 0341 14000000 		.4byte	.LASF29
+ 800 0345 14000000 		.4byte	.LASF29
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 18
+
+
+ 801 0349 04       		.byte	0x4
+ 802 034a 32       		.byte	0x32
+ 803 034b 00       		.byte	0
+ 804              		.section	.debug_abbrev,"",%progbits
+ 805              	.Ldebug_abbrev0:
+ 806 0000 01       		.uleb128 0x1
+ 807 0001 11       		.uleb128 0x11
+ 808 0002 01       		.byte	0x1
+ 809 0003 25       		.uleb128 0x25
+ 810 0004 0E       		.uleb128 0xe
+ 811 0005 13       		.uleb128 0x13
+ 812 0006 0B       		.uleb128 0xb
+ 813 0007 03       		.uleb128 0x3
+ 814 0008 0E       		.uleb128 0xe
+ 815 0009 1B       		.uleb128 0x1b
+ 816 000a 0E       		.uleb128 0xe
+ 817 000b 55       		.uleb128 0x55
+ 818 000c 17       		.uleb128 0x17
+ 819 000d 11       		.uleb128 0x11
+ 820 000e 01       		.uleb128 0x1
+ 821 000f 10       		.uleb128 0x10
+ 822 0010 17       		.uleb128 0x17
+ 823 0011 00       		.byte	0
+ 824 0012 00       		.byte	0
+ 825 0013 02       		.uleb128 0x2
+ 826 0014 24       		.uleb128 0x24
+ 827 0015 00       		.byte	0
+ 828 0016 0B       		.uleb128 0xb
+ 829 0017 0B       		.uleb128 0xb
+ 830 0018 3E       		.uleb128 0x3e
+ 831 0019 0B       		.uleb128 0xb
+ 832 001a 03       		.uleb128 0x3
+ 833 001b 0E       		.uleb128 0xe
+ 834 001c 00       		.byte	0
+ 835 001d 00       		.byte	0
+ 836 001e 03       		.uleb128 0x3
+ 837 001f 24       		.uleb128 0x24
+ 838 0020 00       		.byte	0
+ 839 0021 0B       		.uleb128 0xb
+ 840 0022 0B       		.uleb128 0xb
+ 841 0023 3E       		.uleb128 0x3e
+ 842 0024 0B       		.uleb128 0xb
+ 843 0025 03       		.uleb128 0x3
+ 844 0026 08       		.uleb128 0x8
+ 845 0027 00       		.byte	0
+ 846 0028 00       		.byte	0
+ 847 0029 04       		.uleb128 0x4
+ 848 002a 16       		.uleb128 0x16
+ 849 002b 00       		.byte	0
+ 850 002c 03       		.uleb128 0x3
+ 851 002d 0E       		.uleb128 0xe
+ 852 002e 3A       		.uleb128 0x3a
+ 853 002f 0B       		.uleb128 0xb
+ 854 0030 3B       		.uleb128 0x3b
+ 855 0031 05       		.uleb128 0x5
+ 856 0032 49       		.uleb128 0x49
+ 857 0033 13       		.uleb128 0x13
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 19
+
+
+ 858 0034 00       		.byte	0
+ 859 0035 00       		.byte	0
+ 860 0036 05       		.uleb128 0x5
+ 861 0037 35       		.uleb128 0x35
+ 862 0038 00       		.byte	0
+ 863 0039 49       		.uleb128 0x49
+ 864 003a 13       		.uleb128 0x13
+ 865 003b 00       		.byte	0
+ 866 003c 00       		.byte	0
+ 867 003d 06       		.uleb128 0x6
+ 868 003e 2E       		.uleb128 0x2e
+ 869 003f 01       		.byte	0x1
+ 870 0040 3F       		.uleb128 0x3f
+ 871 0041 19       		.uleb128 0x19
+ 872 0042 03       		.uleb128 0x3
+ 873 0043 0E       		.uleb128 0xe
+ 874 0044 3A       		.uleb128 0x3a
+ 875 0045 0B       		.uleb128 0xb
+ 876 0046 3B       		.uleb128 0x3b
+ 877 0047 0B       		.uleb128 0xb
+ 878 0048 27       		.uleb128 0x27
+ 879 0049 19       		.uleb128 0x19
+ 880 004a 49       		.uleb128 0x49
+ 881 004b 13       		.uleb128 0x13
+ 882 004c 11       		.uleb128 0x11
+ 883 004d 01       		.uleb128 0x1
+ 884 004e 12       		.uleb128 0x12
+ 885 004f 06       		.uleb128 0x6
+ 886 0050 40       		.uleb128 0x40
+ 887 0051 18       		.uleb128 0x18
+ 888 0052 9742     		.uleb128 0x2117
+ 889 0054 19       		.uleb128 0x19
+ 890 0055 01       		.uleb128 0x1
+ 891 0056 13       		.uleb128 0x13
+ 892 0057 00       		.byte	0
+ 893 0058 00       		.byte	0
+ 894 0059 07       		.uleb128 0x7
+ 895 005a 05       		.uleb128 0x5
+ 896 005b 00       		.byte	0
+ 897 005c 03       		.uleb128 0x3
+ 898 005d 0E       		.uleb128 0xe
+ 899 005e 3A       		.uleb128 0x3a
+ 900 005f 0B       		.uleb128 0xb
+ 901 0060 3B       		.uleb128 0x3b
+ 902 0061 0B       		.uleb128 0xb
+ 903 0062 49       		.uleb128 0x49
+ 904 0063 13       		.uleb128 0x13
+ 905 0064 02       		.uleb128 0x2
+ 906 0065 17       		.uleb128 0x17
+ 907 0066 00       		.byte	0
+ 908 0067 00       		.byte	0
+ 909 0068 08       		.uleb128 0x8
+ 910 0069 34       		.uleb128 0x34
+ 911 006a 00       		.byte	0
+ 912 006b 03       		.uleb128 0x3
+ 913 006c 0E       		.uleb128 0xe
+ 914 006d 3A       		.uleb128 0x3a
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 20
+
+
+ 915 006e 0B       		.uleb128 0xb
+ 916 006f 3B       		.uleb128 0x3b
+ 917 0070 0B       		.uleb128 0xb
+ 918 0071 49       		.uleb128 0x49
+ 919 0072 13       		.uleb128 0x13
+ 920 0073 02       		.uleb128 0x2
+ 921 0074 17       		.uleb128 0x17
+ 922 0075 00       		.byte	0
+ 923 0076 00       		.byte	0
+ 924 0077 09       		.uleb128 0x9
+ 925 0078 34       		.uleb128 0x34
+ 926 0079 00       		.byte	0
+ 927 007a 03       		.uleb128 0x3
+ 928 007b 0E       		.uleb128 0xe
+ 929 007c 3A       		.uleb128 0x3a
+ 930 007d 0B       		.uleb128 0xb
+ 931 007e 3B       		.uleb128 0x3b
+ 932 007f 0B       		.uleb128 0xb
+ 933 0080 49       		.uleb128 0x49
+ 934 0081 13       		.uleb128 0x13
+ 935 0082 02       		.uleb128 0x2
+ 936 0083 18       		.uleb128 0x18
+ 937 0084 00       		.byte	0
+ 938 0085 00       		.byte	0
+ 939 0086 0A       		.uleb128 0xa
+ 940 0087 34       		.uleb128 0x34
+ 941 0088 00       		.byte	0
+ 942 0089 03       		.uleb128 0x3
+ 943 008a 0E       		.uleb128 0xe
+ 944 008b 3A       		.uleb128 0x3a
+ 945 008c 0B       		.uleb128 0xb
+ 946 008d 3B       		.uleb128 0x3b
+ 947 008e 0B       		.uleb128 0xb
+ 948 008f 49       		.uleb128 0x49
+ 949 0090 13       		.uleb128 0x13
+ 950 0091 1C       		.uleb128 0x1c
+ 951 0092 06       		.uleb128 0x6
+ 952 0093 00       		.byte	0
+ 953 0094 00       		.byte	0
+ 954 0095 0B       		.uleb128 0xb
+ 955 0096 0B       		.uleb128 0xb
+ 956 0097 01       		.byte	0x1
+ 957 0098 11       		.uleb128 0x11
+ 958 0099 01       		.uleb128 0x1
+ 959 009a 12       		.uleb128 0x12
+ 960 009b 06       		.uleb128 0x6
+ 961 009c 01       		.uleb128 0x1
+ 962 009d 13       		.uleb128 0x13
+ 963 009e 00       		.byte	0
+ 964 009f 00       		.byte	0
+ 965 00a0 0C       		.uleb128 0xc
+ 966 00a1 34       		.uleb128 0x34
+ 967 00a2 00       		.byte	0
+ 968 00a3 03       		.uleb128 0x3
+ 969 00a4 08       		.uleb128 0x8
+ 970 00a5 3A       		.uleb128 0x3a
+ 971 00a6 0B       		.uleb128 0xb
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 21
+
+
+ 972 00a7 3B       		.uleb128 0x3b
+ 973 00a8 0B       		.uleb128 0xb
+ 974 00a9 49       		.uleb128 0x49
+ 975 00aa 13       		.uleb128 0x13
+ 976 00ab 02       		.uleb128 0x2
+ 977 00ac 17       		.uleb128 0x17
+ 978 00ad 00       		.byte	0
+ 979 00ae 00       		.byte	0
+ 980 00af 0D       		.uleb128 0xd
+ 981 00b0 898201   		.uleb128 0x4109
+ 982 00b3 01       		.byte	0x1
+ 983 00b4 11       		.uleb128 0x11
+ 984 00b5 01       		.uleb128 0x1
+ 985 00b6 31       		.uleb128 0x31
+ 986 00b7 13       		.uleb128 0x13
+ 987 00b8 01       		.uleb128 0x1
+ 988 00b9 13       		.uleb128 0x13
+ 989 00ba 00       		.byte	0
+ 990 00bb 00       		.byte	0
+ 991 00bc 0E       		.uleb128 0xe
+ 992 00bd 8A8201   		.uleb128 0x410a
+ 993 00c0 00       		.byte	0
+ 994 00c1 02       		.uleb128 0x2
+ 995 00c2 18       		.uleb128 0x18
+ 996 00c3 9142     		.uleb128 0x2111
+ 997 00c5 18       		.uleb128 0x18
+ 998 00c6 00       		.byte	0
+ 999 00c7 00       		.byte	0
+ 1000 00c8 0F       		.uleb128 0xf
+ 1001 00c9 898201   		.uleb128 0x4109
+ 1002 00cc 01       		.byte	0x1
+ 1003 00cd 11       		.uleb128 0x11
+ 1004 00ce 01       		.uleb128 0x1
+ 1005 00cf 31       		.uleb128 0x31
+ 1006 00d0 13       		.uleb128 0x13
+ 1007 00d1 00       		.byte	0
+ 1008 00d2 00       		.byte	0
+ 1009 00d3 10       		.uleb128 0x10
+ 1010 00d4 0B       		.uleb128 0xb
+ 1011 00d5 01       		.byte	0x1
+ 1012 00d6 55       		.uleb128 0x55
+ 1013 00d7 17       		.uleb128 0x17
+ 1014 00d8 01       		.uleb128 0x1
+ 1015 00d9 13       		.uleb128 0x13
+ 1016 00da 00       		.byte	0
+ 1017 00db 00       		.byte	0
+ 1018 00dc 11       		.uleb128 0x11
+ 1019 00dd 898201   		.uleb128 0x4109
+ 1020 00e0 00       		.byte	0
+ 1021 00e1 11       		.uleb128 0x11
+ 1022 00e2 01       		.uleb128 0x1
+ 1023 00e3 31       		.uleb128 0x31
+ 1024 00e4 13       		.uleb128 0x13
+ 1025 00e5 00       		.byte	0
+ 1026 00e6 00       		.byte	0
+ 1027 00e7 12       		.uleb128 0x12
+ 1028 00e8 01       		.uleb128 0x1
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 22
+
+
+ 1029 00e9 01       		.byte	0x1
+ 1030 00ea 49       		.uleb128 0x49
+ 1031 00eb 13       		.uleb128 0x13
+ 1032 00ec 01       		.uleb128 0x1
+ 1033 00ed 13       		.uleb128 0x13
+ 1034 00ee 00       		.byte	0
+ 1035 00ef 00       		.byte	0
+ 1036 00f0 13       		.uleb128 0x13
+ 1037 00f1 21       		.uleb128 0x21
+ 1038 00f2 00       		.byte	0
+ 1039 00f3 49       		.uleb128 0x49
+ 1040 00f4 13       		.uleb128 0x13
+ 1041 00f5 2F       		.uleb128 0x2f
+ 1042 00f6 0B       		.uleb128 0xb
+ 1043 00f7 00       		.byte	0
+ 1044 00f8 00       		.byte	0
+ 1045 00f9 14       		.uleb128 0x14
+ 1046 00fa 0F       		.uleb128 0xf
+ 1047 00fb 00       		.byte	0
+ 1048 00fc 0B       		.uleb128 0xb
+ 1049 00fd 0B       		.uleb128 0xb
+ 1050 00fe 49       		.uleb128 0x49
+ 1051 00ff 13       		.uleb128 0x13
+ 1052 0100 00       		.byte	0
+ 1053 0101 00       		.byte	0
+ 1054 0102 15       		.uleb128 0x15
+ 1055 0103 2E       		.uleb128 0x2e
+ 1056 0104 00       		.byte	0
+ 1057 0105 3F       		.uleb128 0x3f
+ 1058 0106 19       		.uleb128 0x19
+ 1059 0107 3C       		.uleb128 0x3c
+ 1060 0108 19       		.uleb128 0x19
+ 1061 0109 6E       		.uleb128 0x6e
+ 1062 010a 0E       		.uleb128 0xe
+ 1063 010b 03       		.uleb128 0x3
+ 1064 010c 0E       		.uleb128 0xe
+ 1065 010d 3A       		.uleb128 0x3a
+ 1066 010e 0B       		.uleb128 0xb
+ 1067 010f 3B       		.uleb128 0x3b
+ 1068 0110 0B       		.uleb128 0xb
+ 1069 0111 00       		.byte	0
+ 1070 0112 00       		.byte	0
+ 1071 0113 00       		.byte	0
+ 1072              		.section	.debug_loc,"",%progbits
+ 1073              	.Ldebug_loc0:
+ 1074              	.LLST0:
+ 1075 0000 00000000 		.4byte	.LVL0
+ 1076 0004 22000000 		.4byte	.LVL6
+ 1077 0008 0100     		.2byte	0x1
+ 1078 000a 50       		.byte	0x50
+ 1079 000b 22000000 		.4byte	.LVL6
+ 1080 000f 98010000 		.4byte	.LFE33
+ 1081 0013 0400     		.2byte	0x4
+ 1082 0015 F3       		.byte	0xf3
+ 1083 0016 01       		.uleb128 0x1
+ 1084 0017 50       		.byte	0x50
+ 1085 0018 9F       		.byte	0x9f
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 23
+
+
+ 1086 0019 00000000 		.4byte	0
+ 1087 001d 00000000 		.4byte	0
+ 1088              	.LLST1:
+ 1089 0021 00000000 		.4byte	.LVL0
+ 1090 0025 22000000 		.4byte	.LVL6
+ 1091 0029 0100     		.2byte	0x1
+ 1092 002b 51       		.byte	0x51
+ 1093 002c 22000000 		.4byte	.LVL6
+ 1094 0030 98010000 		.4byte	.LFE33
+ 1095 0034 0400     		.2byte	0x4
+ 1096 0036 F3       		.byte	0xf3
+ 1097 0037 01       		.uleb128 0x1
+ 1098 0038 51       		.byte	0x51
+ 1099 0039 9F       		.byte	0x9f
+ 1100 003a 00000000 		.4byte	0
+ 1101 003e 00000000 		.4byte	0
+ 1102              	.LLST2:
+ 1103 0042 1C000000 		.4byte	.LVL4
+ 1104 0046 8A010000 		.4byte	.LVL54
+ 1105 004a 0100     		.2byte	0x1
+ 1106 004c 56       		.byte	0x56
+ 1107 004d 00000000 		.4byte	0
+ 1108 0051 00000000 		.4byte	0
+ 1109              	.LLST3:
+ 1110 0055 04000000 		.4byte	.LVL1
+ 1111 0059 64010000 		.4byte	.LVL49
+ 1112 005d 0A00     		.2byte	0xa
+ 1113 005f 9E       		.byte	0x9e
+ 1114 0060 08       		.uleb128 0x8
+ 1115 0061 00000000 		.8byte	0
+ 1115      00000000 
+ 1116 0069 64010000 		.4byte	.LVL49
+ 1117 006d 7A010000 		.4byte	.LVL50
+ 1118 0071 0600     		.2byte	0x6
+ 1119 0073 50       		.byte	0x50
+ 1120 0074 93       		.byte	0x93
+ 1121 0075 04       		.uleb128 0x4
+ 1122 0076 51       		.byte	0x51
+ 1123 0077 93       		.byte	0x93
+ 1124 0078 04       		.uleb128 0x4
+ 1125 0079 7C010000 		.4byte	.LVL51
+ 1126 007d 98010000 		.4byte	.LFE33
+ 1127 0081 0600     		.2byte	0x6
+ 1128 0083 50       		.byte	0x50
+ 1129 0084 93       		.byte	0x93
+ 1130 0085 04       		.uleb128 0x4
+ 1131 0086 51       		.byte	0x51
+ 1132 0087 93       		.byte	0x93
+ 1133 0088 04       		.uleb128 0x4
+ 1134 0089 00000000 		.4byte	0
+ 1135 008d 00000000 		.4byte	0
+ 1136              	.LLST4:
+ 1137 0091 04000000 		.4byte	.LVL1
+ 1138 0095 74000000 		.4byte	.LVL13
+ 1139 0099 0200     		.2byte	0x2
+ 1140 009b 30       		.byte	0x30
+ 1141 009c 9F       		.byte	0x9f
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 24
+
+
+ 1142 009d 74000000 		.4byte	.LVL13
+ 1143 00a1 88000000 		.4byte	.LVL16
+ 1144 00a5 0100     		.2byte	0x1
+ 1145 00a7 54       		.byte	0x54
+ 1146 00a8 8A000000 		.4byte	.LVL17
+ 1147 00ac AA000000 		.4byte	.LVL21
+ 1148 00b0 0100     		.2byte	0x1
+ 1149 00b2 54       		.byte	0x54
+ 1150 00b3 AC000000 		.4byte	.LVL22
+ 1151 00b7 CC000000 		.4byte	.LVL26
+ 1152 00bb 0100     		.2byte	0x1
+ 1153 00bd 54       		.byte	0x54
+ 1154 00be CE000000 		.4byte	.LVL27
+ 1155 00c2 EE000000 		.4byte	.LVL31
+ 1156 00c6 0100     		.2byte	0x1
+ 1157 00c8 54       		.byte	0x54
+ 1158 00c9 F0000000 		.4byte	.LVL32
+ 1159 00cd 10010000 		.4byte	.LVL36
+ 1160 00d1 0100     		.2byte	0x1
+ 1161 00d3 54       		.byte	0x54
+ 1162 00d4 12010000 		.4byte	.LVL37
+ 1163 00d8 32010000 		.4byte	.LVL41
+ 1164 00dc 0100     		.2byte	0x1
+ 1165 00de 54       		.byte	0x54
+ 1166 00df 34010000 		.4byte	.LVL42
+ 1167 00e3 54010000 		.4byte	.LVL46
+ 1168 00e7 0100     		.2byte	0x1
+ 1169 00e9 54       		.byte	0x54
+ 1170 00ea 56010000 		.4byte	.LVL47
+ 1171 00ee 64010000 		.4byte	.LVL49
+ 1172 00f2 0100     		.2byte	0x1
+ 1173 00f4 54       		.byte	0x54
+ 1174 00f5 00000000 		.4byte	0
+ 1175 00f9 00000000 		.4byte	0
+ 1176              	.LLST5:
+ 1177 00fd 1E000000 		.4byte	.LVL5
+ 1178 0101 22000000 		.4byte	.LVL6
+ 1179 0105 0200     		.2byte	0x2
+ 1180 0107 48       		.byte	0x48
+ 1181 0108 9F       		.byte	0x9f
+ 1182 0109 22000000 		.4byte	.LVL6
+ 1183 010d 72000000 		.4byte	.LVL12
+ 1184 0111 0100     		.2byte	0x1
+ 1185 0113 54       		.byte	0x54
+ 1186 0114 00000000 		.4byte	0
+ 1187 0118 00000000 		.4byte	0
+ 1188              	.LLST6:
+ 1189 011c 5C010000 		.4byte	.LVL48
+ 1190 0120 64010000 		.4byte	.LVL49
+ 1191 0124 0200     		.2byte	0x2
+ 1192 0126 30       		.byte	0x30
+ 1193 0127 9F       		.byte	0x9f
+ 1194 0128 64010000 		.4byte	.LVL49
+ 1195 012c 98010000 		.4byte	.LFE33
+ 1196 0130 0100     		.2byte	0x1
+ 1197 0132 53       		.byte	0x53
+ 1198 0133 00000000 		.4byte	0
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 25
+
+
+ 1199 0137 00000000 		.4byte	0
+ 1200              		.section	.debug_aranges,"",%progbits
+ 1201 0000 1C000000 		.4byte	0x1c
+ 1202 0004 0200     		.2byte	0x2
+ 1203 0006 00000000 		.4byte	.Ldebug_info0
+ 1204 000a 04       		.byte	0x4
+ 1205 000b 00       		.byte	0
+ 1206 000c 0000     		.2byte	0
+ 1207 000e 0000     		.2byte	0
+ 1208 0010 00000000 		.4byte	.LFB33
+ 1209 0014 98010000 		.4byte	.LFE33-.LFB33
+ 1210 0018 00000000 		.4byte	0
+ 1211 001c 00000000 		.4byte	0
+ 1212              		.section	.debug_ranges,"",%progbits
+ 1213              	.Ldebug_ranges0:
+ 1214 0000 5C010000 		.4byte	.LBB3
+ 1215 0004 5E010000 		.4byte	.LBE3
+ 1216 0008 62010000 		.4byte	.LBB4
+ 1217 000c 88010000 		.4byte	.LBE4
+ 1218 0010 00000000 		.4byte	0
+ 1219 0014 00000000 		.4byte	0
+ 1220 0018 00000000 		.4byte	.LFB33
+ 1221 001c 98010000 		.4byte	.LFE33
+ 1222 0020 00000000 		.4byte	0
+ 1223 0024 00000000 		.4byte	0
+ 1224              		.section	.debug_line,"",%progbits
+ 1225              	.Ldebug_line0:
+ 1226 0000 6D010000 		.section	.debug_str,"MS",%progbits,1
+ 1226      02006B00 
+ 1226      00000201 
+ 1226      FB0E0D00 
+ 1226      01010101 
+ 1227              	.LASF28:
+ 1228 0000 43794465 		.ascii	"CyDelayCycles\000"
+ 1228      6C617943 
+ 1228      79636C65 
+ 1228      7300
+ 1229              	.LASF16:
+ 1230 000e 72656733 		.ascii	"reg32\000"
+ 1230      3200
+ 1231              	.LASF29:
+ 1232 0014 436F6E74 		.ascii	"Controller1_Read\000"
+ 1232      726F6C6C 
+ 1232      6572315F 
+ 1232      52656164 
+ 1232      00
+ 1233              	.LASF14:
+ 1234 0025 75696E74 		.ascii	"uint64\000"
+ 1234      363400
+ 1235              	.LASF32:
+ 1236 002c 453A5C72 		.ascii	"E:\\repos\\NP_ZMQController\\microcontroller_code\\"
+ 1236      65706F73 
+ 1236      5C4E505F 
+ 1236      5A4D5143 
+ 1236      6F6E7472 
+ 1237 005b 4743436F 		.ascii	"GCController\\Controller.cydsn\000"
+ 1237      6E74726F 
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 26
+
+
+ 1237      6C6C6572 
+ 1237      5C436F6E 
+ 1237      74726F6C 
+ 1238              	.LASF12:
+ 1239 0079 666C6F61 		.ascii	"float\000"
+ 1239      7400
+ 1240              	.LASF26:
+ 1241 007f 636F756E 		.ascii	"counter\000"
+ 1241      74657200 
+ 1242              	.LASF1:
+ 1243 0087 756E7369 		.ascii	"unsigned char\000"
+ 1243      676E6564 
+ 1243      20636861 
+ 1243      7200
+ 1244              	.LASF21:
+ 1245 0095 73656E64 		.ascii	"sendingSequence\000"
+ 1245      696E6753 
+ 1245      65717565 
+ 1245      6E636500 
+ 1246              	.LASF11:
+ 1247 00a5 696E7431 		.ascii	"int16\000"
+ 1247      3600
+ 1248              	.LASF5:
+ 1249 00ab 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1249      20756E73 
+ 1249      69676E65 
+ 1249      6420696E 
+ 1249      7400
+ 1250              	.LASF3:
+ 1251 00bd 73686F72 		.ascii	"short unsigned int\000"
+ 1251      7420756E 
+ 1251      7369676E 
+ 1251      65642069 
+ 1251      6E7400
+ 1252              	.LASF13:
+ 1253 00d0 646F7562 		.ascii	"double\000"
+ 1253      6C6500
+ 1254              	.LASF31:
+ 1255 00d7 47616D65 		.ascii	"GameCubeController.c\000"
+ 1255      43756265 
+ 1255      436F6E74 
+ 1255      726F6C6C 
+ 1255      65722E63 
+ 1256              	.LASF10:
+ 1257 00ec 75696E74 		.ascii	"uint32\000"
+ 1257      333200
+ 1258              	.LASF20:
+ 1259 00f3 72756D62 		.ascii	"rumble\000"
+ 1259      6C6500
+ 1260              	.LASF8:
+ 1261 00fa 756E7369 		.ascii	"unsigned int\000"
+ 1261      676E6564 
+ 1261      20696E74 
+ 1261      00
+ 1262              	.LASF7:
+ 1263 0107 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1263      206C6F6E 
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 27
+
+
+ 1263      6720756E 
+ 1263      7369676E 
+ 1263      65642069 
+ 1264              	.LASF25:
+ 1265 011e 636F6E74 		.ascii	"controllerMASK\000"
+ 1265      726F6C6C 
+ 1265      65724D41 
+ 1265      534B00
+ 1266              	.LASF30:
+ 1267 012d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1267      43313120 
+ 1267      352E342E 
+ 1267      31203230 
+ 1267      31363036 
+ 1268 0160 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1268      20726576 
+ 1268      6973696F 
+ 1268      6E203233 
+ 1268      37373135 
+ 1269 0193 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 1269      66756E63 
+ 1269      74696F6E 
+ 1269      2D736563 
+ 1269      74696F6E 
+ 1270              	.LASF18:
+ 1271 01bb 73697A65 		.ascii	"sizetype\000"
+ 1271      74797065 
+ 1271      00
+ 1272              	.LASF6:
+ 1273 01c4 6C6F6E67 		.ascii	"long long int\000"
+ 1273      206C6F6E 
+ 1273      6720696E 
+ 1273      7400
+ 1274              	.LASF15:
+ 1275 01d2 63686172 		.ascii	"char\000"
+ 1275      00
+ 1276              	.LASF19:
+ 1277 01d7 636F6E74 		.ascii	"controller\000"
+ 1277      726F6C6C 
+ 1277      657200
+ 1278              	.LASF24:
+ 1279 01e2 636F6E74 		.ascii	"controllerDR\000"
+ 1279      726F6C6C 
+ 1279      65724452 
+ 1279      00
+ 1280              	.LASF2:
+ 1281 01ef 73686F72 		.ascii	"short int\000"
+ 1281      7420696E 
+ 1281      7400
+ 1282              	.LASF9:
+ 1283 01f9 75696E74 		.ascii	"uint8\000"
+ 1283      3800
+ 1284              	.LASF4:
+ 1285 01ff 6C6F6E67 		.ascii	"long int\000"
+ 1285      20696E74 
+ 1285      00
+ 1286              	.LASF22:
+ARM GAS  C:\Users\DENNIS~1\AppData\Local\Temp\ccgfclQN.s 			page 28
+
+
+ 1287 0208 72656164 		.ascii	"readBuffer\000"
+ 1287      42756666 
+ 1287      657200
+ 1288              	.LASF17:
+ 1289 0213 6C6F6E67 		.ascii	"long double\000"
+ 1289      20646F75 
+ 1289      626C6500 
+ 1290              	.LASF0:
+ 1291 021f 7369676E 		.ascii	"signed char\000"
+ 1291      65642063 
+ 1291      68617200 
+ 1292              	.LASF23:
+ 1293 022b 666F726D 		.ascii	"formattedData\000"
+ 1293      61747465 
+ 1293      64446174 
+ 1293      6100
+ 1294              	.LASF33:
+ 1295 0239 72656164 		.ascii	"readController\000"
+ 1295      436F6E74 
+ 1295      726F6C6C 
+ 1295      657200
+ 1296              	.LASF27:
+ 1297 0248 5F426F6F 		.ascii	"_Bool\000"
+ 1297      6C00
+ 1298              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
