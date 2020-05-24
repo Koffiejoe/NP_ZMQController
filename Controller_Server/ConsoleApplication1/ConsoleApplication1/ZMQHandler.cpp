@@ -59,8 +59,6 @@ int ZMQHandler::recv()
 	
 	//decoding and sending respons
 	sendRespons(commands);
-
-
 	return(1);
 }
 
@@ -93,13 +91,15 @@ int ZMQHandler::send()
 int ZMQHandler::sendRespons(std::string* commands)
 {
 	int cNumber = 0;		//selected controller
+	int updateSpeed = 0;
+
 	//###### set something with the controller #######
-	if (commands[0] == "sControl")
+	if (commands[0] == "contr")
 	{
 		try												//get number of controller and check if a number
 		{
 			cNumber = stoi(commands[1], NULL, 10);
-			if (cNumber < 0 || cNumber >(controllerList.size() - 1))
+			if (cNumber < 0 || cNumber >(controllerList.size() - 1))	//check if number is within bounds
 			{
 				zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
 			}
@@ -109,11 +109,19 @@ int ZMQHandler::sendRespons(std::string* commands)
 			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
 			return(-1);
 		}
-		if (commands[2] == "sUpdate")
+		if (commands[2] == "sUpdate")	//set update speed
 		{
 			try
 			{
-				controllerList[cNumber]->updateSpeed = stoi(commands[3], NULL, 10);
+				updateSpeed = stoi(commands[3]);
+				if (updateSpeed < 10 || updateSpeed > 20000)
+				{
+					zmq_send(pushPtr, "controllerService!>err>INV_UPD_SPEED>", 38, 0);
+				}
+				else
+				{
+					controllerList[cNumber]->updateSpeed = stoi(commands[3], NULL, 10);
+				}
 			} 
 			catch (std::invalid_argument)
 			{
@@ -150,6 +158,10 @@ int ZMQHandler::sendRespons(std::string* commands)
 		zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
 	}
 
+	else if (commands[0] == "sRumble")
+	{
+
+	}
 	else
 	{
 		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 36, 0);
