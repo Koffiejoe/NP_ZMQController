@@ -165,12 +165,14 @@
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="Controller_Server.cpp" />
     <ClCompile Include="gamecube.cpp" />
+    <ClCompile Include="GC.cpp" />
     <ClCompile Include="NES.cpp" />
     <ClCompile Include="ZMQHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller.h" />
     <ClInclude Include="gamecube.h" />
+    <ClInclude Include="GC.h" />
     <ClInclude Include="NES.h" />
     <ClInclude Include="zmq.hpp" />
     <ClInclude Include="ZMQHandler.h" />

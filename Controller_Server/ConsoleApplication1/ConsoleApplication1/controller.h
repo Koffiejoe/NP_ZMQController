@@ -13,6 +13,7 @@ public:
 	void* rawData;
 	std::chrono::steady_clock::time_point lastUpdate;	//used to set the update speed
 	int updateSpeed = 500;								//ms
+	bool rumble = false;
 	//functions
 	virtual bool getData() = 0;
 	virtual bool sendData() = 0;
