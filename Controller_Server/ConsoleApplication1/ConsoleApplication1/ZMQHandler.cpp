@@ -17,8 +17,8 @@ ZMQHandler::~ZMQHandler()
 {
 	zmq_close(pushPtr);
 	zmq_close(subPtr);
-	zmq_ctx_shutdown(context); //optional for cleaning lady order (get ready you l*zy f*ck)
-	zmq_ctx_term(context); //cleaning lady goes to work
+	zmq_ctx_shutdown(context);
+	zmq_ctx_term(context); 
 }
 
 int ZMQHandler::recv()
@@ -65,6 +65,7 @@ int ZMQHandler::recv()
 int ZMQHandler::send()
 {
 	char temp[100];
+	int written = 0;	//number of chars written
 	if (controllerList.size() == 0)
 	{
 		return -1;
@@ -76,9 +77,9 @@ int ZMQHandler::send()
 		if (controllerList[contrNum]->lastUpdate + std::chrono::milliseconds(controllerList[contrNum]->updateSpeed)
 			<= std::chrono::steady_clock::now())
 		{
-			sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
+			written = sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
 
-			zmq_send(pushPtr, temp, sizeof(temp), 0);
+			zmq_send(pushPtr, temp, written, 0);
 
 			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
 			std::cout << temp << std::endl;
