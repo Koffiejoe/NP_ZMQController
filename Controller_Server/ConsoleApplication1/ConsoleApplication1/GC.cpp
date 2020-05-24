@@ -4,6 +4,7 @@
 #include <stdlib.h>
 GC::GC(std::string commPort) : controller(commPort)
 {
+	type = "GC";
 	controllerSerial.write("t");
 	if (controllerSerial.readline() != "GC_Contr\r\n")
 	{
