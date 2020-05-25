@@ -32,41 +32,54 @@ The main channel that a client has to subscribe to is the "controllerService!>" 
 ### Request from client --> server
 ```
 controllerservice?>contr>#ID#>sUpdate>#update in ms#>
-* Sets the updateSpeed of a controller with a certain ID in milliseconds
-
-controllerservice?>contr>#ID#>gUpdate>
-* Gets the updateSpeed of a controller with a certain ID
-
-controllerservice?>contr>#ID#>gRumble>#1 or 0">
-* Sets the rumble to ON (1) or OFF (0) of a controller with a certain ID
-
-controllerservice?>contr>#ID#>sRumble>
-* Gets the rumble of a controller with a certain ID
-
-controllerservice?>serv>gList>
-* Gets a list of all the controllers connected to the server. (more info under respons)
 ```
+* Sets the updateSpeed of a controller with a certain ID in milliseconds<br>
+```
+controllerservice?>contr>#ID#>gUpdate>
+```
+* Gets the updateSpeed of a controller with a certain ID<br>
+```
+controllerservice?>contr>#ID#>gRumble>#1 or 0">
+```
+* Sets the rumble to ON (1) or OFF (0) of a controller with a certain ID<br>
+```
+controllerservice?>contr>#ID#>sRumble>
+```
+* Gets the rumble of a controller with a certain ID<br>
+```
+controllerservice?>serv>gList>
+```
+* Gets a list of all the controllers connected to the server. (more info under respons)<br>
+
 ### Respons from server --> client
 ```
 controllerservice!>contr>#ID#>gUpdate>#updatespeed in ms#>
-* Gets the updateSpeed of a controller with a certain ID 
-
+```
+* Gets the updateSpeed of a controller with a certain ID <br>
+```
 controllerservice!>contr>#ID#>gRumble>#1 or 0">
-* Get the rumble ON (1) or OFF (0) of a controller with a certain ID
-
+```
+* Get the rumble ON (1) or OFF (0) of a controller with a certain ID<br>
+```
 controllerservice!>serv>gList>
-* Gets a list of all the controllers connected to the server. Currently only 2 types are supported: NES and GC. The place in the respons string indicates which ID they have: the first one has ID 0, the second one ID1, ... <br>
-The values returned are separated by comma's. e.g.: controllerService!>serv>gList>NES,GC> (NES=ID0, GC=ID1)
-
+```
+* Gets a list of all the controllers connected to the server. Currently only 2 types are supported: NES and GC. 
+The place in the respons string indicates which ID they have: the first one has ID 0, the second one ID1, ...
+The values returned are separated by comma's. e.g.: controllerService!>serv>gList>NES,GC> (NES=ID0, GC=ID1)<br>
+```
 controllerService!>err>INV_UPD_SPEED>
+```
 * a wrong updatespeed has been given. make sure it's between 10 and 20000 ms
-
+```
 controllerService!>err>INV_1ST_COM>
+```
 * a wrong 1st command has been given (controllerService!> not included)
-
+```
 controllerService!>err>INV_CONTR_NUM>
+```
 * a wrong ID has been given
-
+```
 controllerService!>err>INV_3RD_COM>
+```
 * a wrong 3rd command has been given (controllerService!> not included)
 ```
