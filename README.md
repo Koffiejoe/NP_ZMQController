@@ -7,9 +7,15 @@ For this Project the [ZMQ Library](https://zeromq.org/languages/cplusplus/) is u
 
 On the client you control the rackets for the pong game. Data gets send through the broker to the game where the rackets respond to the clients commands.<br/>
 The rackets are controlled by using 'z' and 's' for the left racket and 'i' and 'k' for the right racket.<br/>
-The broker receives the following message: 
-* user>command number>command. i.e. bart>1>up1.
-You can quit the game by using the 'q' button on your keyboard.<br/>
+The broker receives the following message: user>command number>command.<br/>
+These are all the available commands:
+| Command       	    | Keybind       |
+| ----------------------|:-------------:|
+| move left paddle up   | 'Z'  	        |
+| move left paddle down | 'S'           |
+| move right paddle up  | 'I'           |
+| move right paddle down| 'K'  			|
+| quit game				| 'Q' 			| 
 
 Playfield:
 <p align="center"><img src="playfield.PNG"></p>
