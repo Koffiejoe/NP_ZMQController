@@ -37,4 +37,9 @@ The buffer gets filled with 'junk' data after the message has been inserted. Thi
 
 <p align="center"><img src="buffer.png"></p>
 
+## Future Work
+
+i was working on making a GUI in JavaScript so the program runs smoother and isn't limited by the terminal refresh/draw rate. this is still under development.<br/>
+<p align="center"><img src="jspong.jpg"></p>
+
 * Bart Gripsen      [LinkedIn](linkedin.com/in/bart-grispen-9634b1181)
