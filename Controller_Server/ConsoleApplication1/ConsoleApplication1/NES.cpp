@@ -2,6 +2,7 @@
 #include <stdio.h>
 NES::NES(std::string commPort) : controller(commPort)
 {
+	type = "NES";
 	controllerSerial.write("init\n");
 	if (controllerSerial.readline() != "ACK\r\n")
 	{

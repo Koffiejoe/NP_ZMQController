@@ -17,8 +17,8 @@ ZMQHandler::~ZMQHandler()
 {
 	zmq_close(pushPtr);
 	zmq_close(subPtr);
-	zmq_ctx_shutdown(context); //optional for cleaning lady order (get ready you l*zy f*ck)
-	zmq_ctx_term(context); //cleaning lady goes to work
+	zmq_ctx_shutdown(context);
+	zmq_ctx_term(context); 
 }
 
 int ZMQHandler::recv()
@@ -59,14 +59,13 @@ int ZMQHandler::recv()
 	
 	//decoding and sending respons
 	sendRespons(commands);
-
-
 	return(1);
 }
 
 int ZMQHandler::send()
 {
 	char temp[100];
+	int written = 0;	//number of chars written
 	if (controllerList.size() == 0)
 	{
 		return -1;
@@ -78,9 +77,9 @@ int ZMQHandler::send()
 		if (controllerList[contrNum]->lastUpdate + std::chrono::milliseconds(controllerList[contrNum]->updateSpeed)
 			<= std::chrono::steady_clock::now())
 		{
-			sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
+			written = sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
 
-			zmq_send(pushPtr, temp, sizeof(temp), 0);
+			zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0
 
 			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
 			std::cout << temp << std::endl;
@@ -93,66 +92,111 @@ int ZMQHandler::send()
 int ZMQHandler::sendRespons(std::string* commands)
 {
 	int cNumber = 0;		//selected controller
-	//###### set something with the controller #######
-	if (commands[0] == "sControl")
+	int updateSpeed = 0;
+
+	//###### set/get something with the controller #######
+	if (commands[0] == "contr")
 	{
-		try												//get number of controller and check if a number
+		//decode commands[1] (number of controller)
+		try
 		{
 			cNumber = stoi(commands[1], NULL, 10);
-			if (cNumber < 0 || cNumber >(controllerList.size() - 1))
+			if (cNumber < 0 || cNumber >(controllerList.size() - 1))	//check if number is within bounds
 			{
-				zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
+				zmq_send(pushPtr, ERR_INV_CONTR_NUM, sizeof(ERR_INV_CONTR_NUM), 0);
 			}
 		}
 		catch (std::invalid_argument)					//if NaN: send error and exit
 		{
-			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
+			zmq_send(pushPtr, ERR_INV_CONTR_NUM, sizeof(ERR_INV_CONTR_NUM), 0);
 			return(-1);
 		}
-		if (commands[2] == "sUpdate")
+		//--set updatespeed--
+		if (commands[2] == "sUpdate")	//set update speed
 		{
 			try
 			{
-				controllerList[cNumber]->updateSpeed = stoi(commands[3], NULL, 10);
-			} 
+				updateSpeed = stoi(commands[3]);
+				if (updateSpeed < 10 || updateSpeed > 20000)
+				{
+					zmq_send(pushPtr, ERR_INV_UPDATE_SPEED, sizeof(ERR_INV_UPDATE_SPEED), 0);
+				}
+				else
+				{
+					controllerList[cNumber]->updateSpeed = stoi(commands[3], NULL, 10);
+				}
+			}
 			catch (std::invalid_argument)
 			{
-				zmq_send(pushPtr, "controllerService!>err>INV_UPD_SPEED>", 38, 0);
+				zmq_send(pushPtr, ERR_INV_UPDATE_SPEED, sizeof(ERR_INV_UPDATE_SPEED), 0);
 				return(-1);
 			}
 		}
-		//add extra 3rd commands here
+		//--get updatespeed--
+		else if (commands[2] == "gUpdate")
+		{
+			char temp[50];
+			int characters;
+			characters = sprintf_s(temp, sizeof(temp), "controllerService!>contr>gUpdate>%d>%d>\0", cNumber, controllerList[cNumber]->updateSpeed); //characters: total ammount
+			zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
+		}
+		//--set rumble--
+		else if (commands[2] == "sRumble")
+		{
+			if (commands[3] == "1")
+			{
+				controllerList[cNumber]->rumble = true;
+				controllerList[cNumber]->sendData();
+			}
+			else if (commands[3] == "0")
+			{
+				controllerList[cNumber]->rumble = false;
+				controllerList[cNumber]->sendData();
+			}
+			else
+			{
+				zmq_send(pushPtr, ERR_INV_3RD_COMM, sizeof(ERR_INV_3RD_COMM), 0);
+			}
+		}
+		//--get rumble--
+		else if (commands[2] == "gRumble")
+		{
+			char temp[50];
+			int characters;
+			characters = sprintf_s(temp, sizeof(temp), "controllerService!>contr>gRumble>%d>%d>\0", cNumber, controllerList[cNumber]->rumble); //characters: total ammount
+			zmq_send(pushPtr, temp, characters, 0);
+		}
+		//add extra 3rd command here
 		else
 		{
-			zmq_send(pushPtr, "controllerService!>err>INV_3RD_COM>", 36, 0);
+			zmq_send(pushPtr,ERR_INV_3RD_COMM, sizeof(ERR_INV_3RD_COMM), 0);
 			return(-1);
 		}
 
 	}
 
-
-	//######## get updatespeed ########
-	else if (commands[0] == "gUpdate")
+	//server commands
+	else if (commands[0] == "serv")
 	{
-		try													//get number of controller and check if correct
+		if (commands[1] == "gList")
 		{
-			cNumber = stoi(commands[1], NULL, 10);
+			std::string list;
+			list.append("controllerService!>serv>gList>");
+			for (int i = 0; i < controllerList.size(); ++i)
+			{
+				list.append(controllerList[i]->type);
+				if (i < (controllerList.size() - 1))		//don't add last ,
+				{
+					list.append(",");
+				}
+			}
+			list.append(">\0");
+			zmq_send(pushPtr, list.c_str(), list.size(), 0);
 		}
-		catch (std::invalid_argument)						//if not correct: send error and exit
-		{
-			zmq_send(pushPtr, "controllerService!>err>INV_CONTR_NUM>", 38, 0);
-			return(-1);
-		}
-		//add controller number check, but is not yet here
-		char temp[50];
-		int characters;
-		characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0", cNumber, controllerList[cNumber]->updateSpeed); //characters: total ammount
-		zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
 	}
-
 	else
 	{
-		zmq_send(pushPtr, "controllerService!>err>INV_1ST_COM>", 36, 0);
+		zmq_send(pushPtr, ERR_INV_1ST_COMM, sizeof(ERR_INV_1ST_COMM), 0);
 		return(-1);
 	}
 	return(0);
