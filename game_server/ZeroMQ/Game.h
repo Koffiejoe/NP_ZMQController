@@ -104,7 +104,7 @@ class cGameManger
 private:
 	int width, height;
 	int score1, score2;
-	char up1, down1, up2, down2;
+	char up1, down1, up2, down2, stop_quit;
 	bool quit;
 	cBall* ball;
 	cPaddle* player1;
@@ -117,6 +117,7 @@ public:
 		quit = false;
 		up1 = 'z'; up2 = 'i';
 		down1 = 's'; down2 = 'k';
+		stop_quit = 'q';
 		score1 = score2 = 0;
 		width = w; height = h;
 		ball = new cBall(w / 2, h / 2);
@@ -220,29 +221,29 @@ public:
 		{
 			if (current == up1)
 				if (player1y > 0)
-					zmq_send(pushPtr, "bart>1>up1>", 10, 0);
+					zmq_send(pushPtr, "bart>1>up1>", 11, 0);
 			if (current == up2)
 				if (player2y > 0)
-					zmq_send(pushPtr, "bart>1>up2>", 10, 0);
+					zmq_send(pushPtr, "bart>1>up2>", 11, 0);
 			if (current == down1)
 				if (player1y + 4 < height)
-					zmq_send(pushPtr, "bart>1>down1>", 12, 0);
+					zmq_send(pushPtr, "bart>1>down1>", 13, 0);
 			if (current == down2)
 				if (player2y + 4 < height)
-					zmq_send(pushPtr, "bart>1>down2>", 12, 0);
+					zmq_send(pushPtr, "bart>1>down2>", 13, 0);
 			if (ball->getDirection() == STOP)
 				ball->randomDirection();
 
-			if (current == 'q')
-				quit = true;
+			if (current == stop_quit) {
+				zmq_send(pushPtr, "bart>0>quit>", 12, 0);
+			}
 		}
 		string commands[4];			//the commands
-		char buffer[500];
+		char buffer[265];
 		string temp_buffer;
 		int length;
-		temp_buffer.clear();
+		//temp_buffer.clear();
 		length = zmq_recv(subPtr, buffer, sizeof(buffer), ZMQ_NOBLOCK);
-		cout << buffer;
 		//Decode the message received
 		char* currPosPtr = buffer;
 		char* nextPosPtr = buffer;
@@ -266,20 +267,28 @@ public:
 		if (commands[1] == "up1")
 			if (player1y > 0) {
 				player1->moveUp();
-				cout << "up1";
+				cout << "up left";
 			}
 		if (commands[1] == "up2")
 			if (player2y > 0) {
 				player2->moveUp();
-				cout << "up2";
+				cout << "up right";
 			}
 		if (commands[1] == "down1")
-			if (player1y + 4 < height)
+			if (player1y + 4 < height) {
 				player1->moveDown();
+				cout << "down left";
+			}
 		if (commands[1] == "down2")
-			if (player2y + 4 < height)
+			if (player2y + 4 < height) {
 				player2->moveDown();
-
+				cout << "down right";
+			}
+		if (commands[0] == "q")
+			{
+				quit = true;
+				cout << "quit";
+			}
 	}
 	void Logic()
 	{
