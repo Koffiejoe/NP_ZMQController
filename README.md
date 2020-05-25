@@ -1,4 +1,4 @@
-# CZMQ:Controller-Server
+# CZMQ: Controller-Server
 The purpose of this project is to create a server which can send the state of a game controller over a ZMQ network. It automatically handles the update interval and communication over serial connection.
 
 Although you can add a wide variety of input, 2 types of controllers have already been implemented: a NES and an original GC controller. The code to program the microcontrollers which connect to the NES and GC controllers has been included in the microcontroller_code folder.
@@ -28,6 +28,8 @@ Although you can add a wide variety of input, 2 types of controllers have alread
 This service runs on a simple string-based protocol where commands separated by a '>' sign are send over the network. Several commands can be send to the server, and controllerstatus and error codes are received. All the controllers connected to the server get assigned a certain ID. This list can be requested from the server by sending a certain request (see below).
 
 The main channel that a client has to subscribe to is the "controllerService!>" channel. All responses from the server happen with this first command. All the request from the client have to be made to the "controllerService?>" channel. Below is a detailed overview of all commands used in this system. All values between ## have to be replaced by a certain value (do not include the #!).
+
+An example client has been included under controllerClient which can request and set data from a NES and GC controller.
 
 ### Request from client --> server
 ```
