@@ -216,9 +216,10 @@ public:
 		int player2x = player2->getX();
 		int player1y = player1->getY();
 		int player2y = player2->getY();
-		char current = _getch();
+		
 		if (_kbhit())
 		{
+			char current = _getch();
 			if (current == up1)
 				if (player1y > 0)
 					zmq_send(pushPtr, "bart>1>up1>", 11, 0);
@@ -235,7 +236,7 @@ public:
 				ball->randomDirection();
 
 			if (current == stop_quit) {
-				zmq_send(pushPtr, "bart>0>quit>", 12, 0);
+				zmq_send(pushPtr, "bart>quit>", 10, 0);
 			}
 		}
 		string commands[4];			//the commands
@@ -284,7 +285,7 @@ public:
 				player2->moveDown();
 				cout << "down right";
 			}
-		if (commands[0] == "q")
+		if (commands[0] == "quit")
 			{
 				quit = true;
 				cout << "quit";

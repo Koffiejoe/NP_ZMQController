@@ -20,7 +20,7 @@ These are all the available commands:
 Playfield:
 <p align="center"><img src="playfield.PNG"></p>
 
-score:
+Score:
 <p align="center"><img src="score.PNG"></p>
 
 Data on the broker:
