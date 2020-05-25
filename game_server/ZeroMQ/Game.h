@@ -3,6 +3,7 @@
 #include <conio.h>
 #include <zmq.h>
 #include "ZMQHandler.h"
+#include <string.h>
 using namespace std;
 enum eDir { STOP = 0, LEFT = 1, UPLEFT = 2, DOWNLEFT = 3, RIGHT = 4, UPRIGHT = 5, DOWNRIGHT = 6 };
 
@@ -108,13 +109,13 @@ private:
 	cBall* ball;
 	cPaddle* player1;
 	cPaddle* player2;
-	void* pushPtr, * subPtr, * context;
+	void* pushPtr, * subPtr, * context, * context_2;
 public:
 	cGameManger(int w, int h)
 	{
 		srand(time(NULL));
 		quit = false;
-		up1 = 'w'; up2 = 'i';
+		up1 = 'z'; up2 = 'i';
 		down1 = 's'; down2 = 'k';
 		score1 = score2 = 0;
 		width = w; height = h;
@@ -122,14 +123,16 @@ public:
 		player1 = new cPaddle(1, h / 2 - 3);
 		player2 = new cPaddle(w - 2, h / 2 - 3);
 		context = zmq_ctx_new();
+		context_2 = zmq_ctx_new();
 		pushPtr = zmq_socket(context, ZMQ_PUSH);
-		subPtr = zmq_socket(context, ZMQ_SUB);
+		subPtr = zmq_socket(context_2, ZMQ_SUB);
+
 
 		zmq_connect(pushPtr, "tcp://benternet.pxl-ea-ict.be:24041");
 		zmq_connect(subPtr, "tcp://benternet.pxl-ea-ict.be:24042");
 
 		//subscribe to channel of server 
-		zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "GameState?>", 20);
+		zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "bart>", 5);
 	}
 	~cGameManger()
 	{
@@ -212,51 +215,71 @@ public:
 		int player2x = player2->getX();
 		int player1y = player1->getY();
 		int player2y = player2->getY();
-
+		char current = _getch();
 		if (_kbhit())
 		{
-			char buffer[500];
-			char current = _getch();
-			zmq_recv(subPtr, buffer, sizeof(buffer), 0);
-			//Decode the message received
-			char* commands[4];			//the commands
-			char* currPosPtr = buffer;
-			char* nextPosPtr = buffer;
-			char temp[20];
-
-			for (short i = 0; i < 4; ++i)  //max commands = 4
-			{
-				currPosPtr = strchr(currPosPtr + 1, '>');							//find where the > character is: shifts up each time
-				if (currPosPtr == NULL) { break; }									//for < 3 commands
-
-				nextPosPtr = strchr(currPosPtr + 1, '>');
-				if (nextPosPtr == NULL) { break; }									//to not include the last >
-				//should add break if memcpy length > sizeof buffer - 1
-
-				memcpy(temp, currPosPtr + 1, (nextPosPtr - currPosPtr) - 1);		//copy the length of the command (excluding the start and end >)
-				temp[(nextPosPtr - currPosPtr) - 1] = NULL;							//add terminating NULL
-				commands[i] = temp;
-			}
-			
-			if (commands[1] == "up1")
+			if (current == up1)
 				if (player1y > 0)
-					player1->moveUp();
-			if (commands[1] == "up2")
+					zmq_send(pushPtr, "bart>1>up1>", 10, 0);
+			if (current == up2)
 				if (player2y > 0)
-					player2->moveUp();
-			if (commands[1] == "down1")
+					zmq_send(pushPtr, "bart>1>up2>", 10, 0);
+			if (current == down1)
 				if (player1y + 4 < height)
-					player1->moveDown();
-			if (commands[1] == "down2")
+					zmq_send(pushPtr, "bart>1>down1>", 12, 0);
+			if (current == down2)
 				if (player2y + 4 < height)
-					player2->moveDown();
-
+					zmq_send(pushPtr, "bart>1>down2>", 12, 0);
 			if (ball->getDirection() == STOP)
 				ball->randomDirection();
 
 			if (current == 'q')
 				quit = true;
 		}
+		string commands[4];			//the commands
+		char buffer[500];
+		string temp_buffer;
+		int length;
+		temp_buffer.clear();
+		length = zmq_recv(subPtr, buffer, sizeof(buffer), ZMQ_NOBLOCK);
+		cout << buffer;
+		//Decode the message received
+		char* currPosPtr = buffer;
+		char* nextPosPtr = buffer;
+		char temp[20];
+		
+		for (short i = 0; i < 4; ++i)  //max commands = 4
+		{
+			currPosPtr = strchr(currPosPtr + 1, '>');							//find where the > character is: shifts up each time
+			if (currPosPtr == NULL) { break; }									//for < 3 commands
+
+			nextPosPtr = strchr(currPosPtr + 1, '>');
+			if (nextPosPtr == NULL) { break; }									//to not include the last >
+			//should add break if memcpy length > sizeof buffer - 1
+
+			memcpy(temp, currPosPtr + 1, (nextPosPtr - currPosPtr) - 1);		//copy the length of the command (excluding the start and end >)
+			temp[(nextPosPtr - currPosPtr) - 1] = NULL;							//add terminating NULL
+			commands[i] = temp;
+		}
+		//string commands = buffer;
+		//cout << commands[1];
+		if (commands[1] == "up1")
+			if (player1y > 0) {
+				player1->moveUp();
+				cout << "up1";
+			}
+		if (commands[1] == "up2")
+			if (player2y > 0) {
+				player2->moveUp();
+				cout << "up2";
+			}
+		if (commands[1] == "down1")
+			if (player1y + 4 < height)
+				player1->moveDown();
+		if (commands[1] == "down2")
+			if (player2y + 4 < height)
+				player2->moveDown();
+
 	}
 	void Logic()
 	{

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <zmq.h>
-//#include "controller.h"
+
 class ZMQHandler
 {
 public:
@@ -9,7 +9,6 @@ public:
 	~ZMQHandler();
 	int recv();
 	int send();
-	//controller* myController = NULL;
 private:
 	//vars
 	void* pushPtr, * subPtr, * context;
