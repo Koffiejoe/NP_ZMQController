@@ -16,3 +16,4 @@ during this project there are issues with filtering the buffer correctly.
 
 <p align="center"><img src="buffer.png"></p>
 
+* Bart Gripsen      [LinkedIn](linkedin.com/in/bart-grispen-9634b1181)
