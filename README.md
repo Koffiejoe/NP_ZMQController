@@ -18,7 +18,7 @@ These are all the available commands:
 | quit game				| 'Q' 			| 
 
 Flowchart:
-<p align="center"><img src="flowchart.PNG"></p>
+<p align="center"><img src="flowchart.png"></p>
 
 Playfield:
 <p align="center"><img src="playfield.PNG"></p>
