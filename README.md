@@ -11,10 +11,10 @@ The broker receives the following message: user>command number>command. i.e. bar
 You can quit the game by using the 'q' button on your keyboard.
 
 Playfield:
-<p align="center"><img src="playfield.png"></p>
+<p align="center"><img src="playfield.PNG"></p>
 
 score:
-<p align="center"><img src="score.png"></p>
+<p align="center"><img src="score.PNG"></p>
 
 Data on the broker:
 
