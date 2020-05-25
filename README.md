@@ -10,6 +10,7 @@ on the client you control the rackets for the pong game. data gets send through 
 Data on the broker:
 
 <p align="center"><img src="broker.png"></p>
+
 ## Troubleshooting
 during this project there are issues with filtering the buffer correctly.
 
