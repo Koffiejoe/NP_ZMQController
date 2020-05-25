@@ -8,7 +8,13 @@ For this Project the [ZMQ Library](https://zeromq.org/languages/cplusplus/) is u
 On the client you control the rackets for the pong game. Data gets send through the broker to the game where the rackets respond to the clients commands.
 The rackets are controlled by using 'z' and 's' for the left racket and 'i' and 'k' for the right racket.
 The broker receives the following message: user>command number>command. i.e. bart>1>up1.
-Maximum score can be set with the numbers on your keyboard
+You can quit the game by using the 'q' button on your keyboard.
+
+Playfield:
+<p align="center"><img src="playfield.png"></p>
+
+score:
+<p align="center"><img src="score.png"></p>
 
 Data on the broker:
 
@@ -16,6 +22,7 @@ Data on the broker:
 
 ## Troubleshooting
 during this project there are issues with filtering the buffer correctly. the buffer gets filled with 'junk' data after the message has been inserted.
+this has been fixed with resizing the buffer.
 
 <p align="center"><img src="buffer.png"></p>
 
