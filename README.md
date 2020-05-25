@@ -17,6 +17,9 @@ These are all the available commands:
 | move right paddle down| 'K'  			|
 | quit game				| 'Q' 			| 
 
+Flowchart:
+<p align="center"><img src="flowchart.PNG"></p>
+
 Playfield:
 <p align="center"><img src="playfield.PNG"></p>
 
