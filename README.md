@@ -14,6 +14,6 @@ Data on the broker:
 ## Troubleshooting
 during this project there are issues with filtering the buffer correctly.
 
-<p align="center"><img src="buffer.png"></p>
+<p align="center"><img src="Buffer.png"></p>
 
 * Bart Gripsen      [LinkedIn](linkedin.com/in/bart-grispen-9634b1181)
