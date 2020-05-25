@@ -137,7 +137,7 @@ int ZMQHandler::sendRespons(std::string* commands)
 		{
 			char temp[50];
 			int characters;
-			characters = sprintf_s(temp, sizeof(temp), "controllerService!>gUpdate>%d>%d>\0", cNumber, controllerList[cNumber]->updateSpeed); //characters: total ammount
+			characters = sprintf_s(temp, sizeof(temp), "controllerService!>contr>gUpdate>%d>%d>\0", cNumber, controllerList[cNumber]->updateSpeed); //characters: total ammount
 			zmq_send(pushPtr, temp, characters + 1, 0);													//characters + 1 bc it does not add the \0
 		}
 		//--set rumble--
@@ -163,7 +163,7 @@ int ZMQHandler::sendRespons(std::string* commands)
 		{
 			char temp[50];
 			int characters;
-			characters = sprintf_s(temp, sizeof(temp), "controllerService!>gRumble>%d>%d>\0", cNumber, controllerList[cNumber]->rumble); //characters: total ammount
+			characters = sprintf_s(temp, sizeof(temp), "controllerService!>contr>gRumble>%d>%d>\0", cNumber, controllerList[cNumber]->rumble); //characters: total ammount
 			zmq_send(pushPtr, temp, characters, 0);
 		}
 		//add extra 3rd command here
@@ -185,7 +185,7 @@ int ZMQHandler::sendRespons(std::string* commands)
 			for (int i = 0; i < controllerList.size(); ++i)
 			{
 				list.append(controllerList[i]->type);
-				if (i < controllerList.size())		//don't add last ,
+				if (i < (controllerList.size() - 1))		//don't add last ,
 				{
 					list.append(",");
 				}
