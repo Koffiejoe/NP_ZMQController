@@ -6,8 +6,8 @@ The purpose of this project is to develop a simple C/C++ application through a c
 For this Project the [ZMQ Library](https://zeromq.org/languages/cplusplus/) is used.
 
 On the client you control the rackets for the pong game. Data gets send through the broker to the game where the rackets respond to the clients commands.<br/>
-The rackets are controlled by using 'z' and 's' for the left racket and 'i' and 'k' for the right racket.<br/>
-The broker receives the following message: user>command number>command.<br/>
+
+The broker receives the following message format: user>command number>command.<br/>
 These are all the available commands:
 | Command       	    | Keybind       |
 | ----------------------|:-------------:|
