@@ -79,7 +79,7 @@ int ZMQHandler::send()
 		{
 			written = sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
 
-			zmq_send(pushPtr, temp, written, 0);
+			zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0
 
 			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
 			std::cout << temp << std::endl;
