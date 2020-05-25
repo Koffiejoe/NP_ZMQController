@@ -1,10 +1,11 @@
 # Network Programming Pong game 
-Made by students of [the hogeschool PXL](https://www.pxl.be).
+Made by student of [the hogeschool PXL](https://www.pxl.be).
 
-The purpose of this project is to develop a simple C/C++ application through a client/server.
+The purpose of this project is to develop a simple C/C++ application through a client/server.<br/>
 
-For this Project the [ZMQ Library](https://zeromq.org/languages/cplusplus/) is used.
-
+For this Project the [ZMQ Library](https://zeromq.org/languages/cplusplus/) is used.<br/>
+The project was build in Visual Studio 2019
+to get ZeroMQ working in Visual Studio for the C and C++ language i reffer to [This] (https://joshuaburkholder.com/wordpress/2018/05/25/build-and-static-link-zeromq-on-windows/) tutorial.
 On the client you control the rackets for the pong game. Data gets send through the broker to the game where the rackets respond to the clients commands.<br/>
 
 The broker receives the following message format: user>command number>command.<br/>
