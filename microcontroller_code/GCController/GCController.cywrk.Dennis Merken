@@ -13,7 +13,7 @@
 <v>Output</v>
 </TreeKeys>
 <TreeStates>
-<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="GCController\Controller\TopDesign">
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
 <ExpandedNodeIds>
 <v>GCController</v>
 <v>GCController\Controller</v>
@@ -138,43 +138,6 @@
 <VisibleNodeIds>
 <v>GCController</v>
 <v>GCController\Controller</v>
-<v>GCController\Controller\CortexM0</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\Cm0Start.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\Controller1.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\Controller1_PM.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\Controller2.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\Controller2_PM.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\CyLFClk.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\GameCubeController.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\main.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_BOOT.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_PM.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_rx.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_rx_PM.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_SCB_IRQ.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_SCBCLK.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_SPI_UART.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_SPI_UART_INT.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_tx.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_tx_PM.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_UART.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Listing Files\UART_UART_BOOT.lst</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Controller.elf</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Controller.hex</v>
-<v>GCController\Controller\CortexM0\ARM_GCC_541\Debug\Controller.map</v>
-<v>GCController\Controller\Controller.gpdsc</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
@@ -232,7 +195,7 @@
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="935, 531" SelectedTabbedMdiWindow="5e0291b3-df6a-483a-b4c5-d4cb4b1558fd"><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\GameCubeController.h" Guid="fff676ae-8162-41c1-9c80-230ecb815c46" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\GameCubeController.c" Guid="f76307a9-d744-46fa-a86d-b8312f0423e2" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\main.c" Guid="5e0291b3-df6a-483a-b4c5-d4cb4b1558fd" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\Controller.cydwr" Guid="dbe8f8c2-1d5f-4e08-aaee-b31a195223c9" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\TopDesign\TopDesign.cysch" Guid="a060da5a-a8cc-417a-9b2f-2c591d24a770" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="366005af-df83-4592-8c3f-8be622226ea9" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="935, 531" SelectedTabbedMdiWindow="f76307a9-d744-46fa-a86d-b8312f0423e2"><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\GameCubeController.h" Guid="fff676ae-8162-41c1-9c80-230ecb815c46" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\GameCubeController.c" Guid="f76307a9-d744-46fa-a86d-b8312f0423e2" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\main.c" Guid="5e0291b3-df6a-483a-b4c5-d4cb4b1558fd" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\Controller.cydwr" Guid="dbe8f8c2-1d5f-4e08-aaee-b31a195223c9" /><DocumentWindow Key="E:\repos\NP_ZMQController\microcontroller_code\GCController\Controller.cydsn\TopDesign\TopDesign.cysch" Guid="a060da5a-a8cc-417a-9b2f-2c591d24a770" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="366005af-df83-4592-8c3f-8be622226ea9" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

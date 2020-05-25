@@ -43,7 +43,7 @@ int main(void)
                 sprintf(sendString, "%08X", secondPart);
                 sprintf(sendString, "%s%08X", sendString, firstPart);
                 UART_UartPutString(sendString);
-                UART_UartPutString("\r");
+                UART_UartPutString("\n");
             }
             if(recvChar == 'r') //rumble
             {
