@@ -42,4 +42,6 @@ The buffer gets filled with 'junk' data after the message has been inserted. Thi
 i was working on making a GUI in JavaScript so the program runs smoother and isn't limited by the terminal refresh/draw rate. this is still under development.<br/>
 <p align="center"><img src="pongGUI.jpg"></p>
 
+the rackets should be controlled with the controller program in the master branch. these 2 projects should only be merged together.
+
 * Bart Gripsen      [LinkedIn](linkedin.com/in/bart-grispen-9634b1181)
