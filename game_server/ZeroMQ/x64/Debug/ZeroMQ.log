@@ -1,3 +1,0 @@
-﻿  game_server.cpp
-C:\Users\Bart\Desktop\NP\ZeroMQ\Game.h(116,13): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  ZeroMQ.vcxproj -> C:\Users\Bart\Desktop\NP\ZeroMQ\x64\Debug\ZeroMQ.exe
