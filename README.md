@@ -41,11 +41,11 @@ controllerservice?>contr>#ID#>gUpdate>
 ```
 * Gets the updateSpeed of a controller with a certain ID<br>
 ```
-controllerservice?>contr>#ID#>gRumble>#1 or 0">
+controllerservice?>contr>#ID#>sRumble>#1 or 0#>
 ```
 * Sets the rumble to ON (1) or OFF (0) of a controller with a certain ID<br>
 ```
-controllerservice?>contr>#ID#>sRumble>
+controllerservice?>contr>#ID#>gRumble>
 ```
 * Gets the rumble of a controller with a certain ID<br>
 ```
