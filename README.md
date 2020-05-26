@@ -54,6 +54,42 @@ controllerservice?>serv>gList>
 * Gets a list of all the controllers connected to the server. (more info under respons)<br>
 
 ### Respons from server --> client
+#### Controller Respons: NES
+The respons from the server is like this: "controllerservice!>#ID#>#data#>" where data is a decimal represented 8-bit value (so ranging from 0 - 255). If you convert this decimal number to a uint8, use the following AND operation to get the status of the buttons.
+```
+	uint8_t & 0x01                    A
+	uint8_t & 0x02                    B
+	uint8_t & 0x04                    Select
+	uint8_t & 0x08                    Start
+        uint8_t & 0x10                    Up
+	uint8_t & 0x20                    Down
+	uint8_t & 0x40                    Left
+	uint8_t & 0x80                    Right
+```
+
+#### Controller Respons: GC
+The respons from the server is like this: "controllerservice!>#ID#>#data#>" where data is a decimal represented 64-bit value . If you convert this decimal number to a uint64, use the following AND operation to get the status of the buttons and joysticks.
+```
+	uint64 & 0x1000000000000000               Start
+	uint64 & 0x0800000000000000               Y
+	uint64 & 0x0400000000000000               X
+	uint64 & 0x0200000000000000               B
+	uint64 & 0x0100000000000000               A
+	uint64 & 0x0040000000000000               Left trigger (button)
+	uint64 & 0x0020000000000000               Right trigger (button)
+	uint64 & 0x0010000000000000               Z
+	uint64 & 0x0008000000000000               Up
+	uint64 & 0x0004000000000000               Down
+	uint64 & 0x0002000000000000               Right
+	uint64 & 0x0001000000000000               Left
+	uint64 & 0x0000FF0000000000               joy X value (8-bit)
+	uint64 & 0x000000FF00000000               joy Y value (8-bit)
+	uint64 & 0x00000000FF000000               c stick X value (8-bit)
+        uint64 & 0x0000000000FF0000               c stick Y value (8-bit)
+	uint64 & 0x000000000000FF00               Right trigger (8-bit)
+	uint64 & 0x00000000000000FF               Left trigger (8-bit)
+```
+#### Other responses
 ```
 controllerservice!>contr>#ID#>gUpdate>#updatespeed in ms#>
 ```
