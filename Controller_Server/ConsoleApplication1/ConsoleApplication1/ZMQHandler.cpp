@@ -77,9 +77,24 @@ int ZMQHandler::send()
 		if (controllerList[contrNum]->lastUpdate + std::chrono::milliseconds(controllerList[contrNum]->updateSpeed)
 			<= std::chrono::steady_clock::now())
 		{
-			written = sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
+			if (controllerList[contrNum]->onlyNewUpdate == true)
+			{
+				if (controllerList[contrNum]->getRawData() != controllerList[contrNum]->prevRespons) //only update when prevrespons is different
+				{
+					written = sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
 
-			zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0
+					zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0
+					controllerList[contrNum]->prevRespons = controllerList[contrNum]->getRawData(); //update prev val
+				}
+			}
+			else
+			{
+				written = sprintf_s(temp, sizeof(temp), "controllerService!>%d>%s>\0", contrNum, controllerList[contrNum]->getRawData().c_str());
+
+				zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0
+				controllerList[contrNum]->prevRespons = controllerList[contrNum]->getRawData(); //update prev val
+			}
+
 
 			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
 			std::cout << temp << std::endl;
@@ -93,6 +108,7 @@ int ZMQHandler::sendRespons(std::string* commands)
 {
 	int cNumber = 0;		//selected controller
 	int updateSpeed = 0;
+	int updateOnChange = 0;
 
 	//###### set/get something with the controller #######
 	if (commands[0] == "contr")
@@ -165,6 +181,19 @@ int ZMQHandler::sendRespons(std::string* commands)
 			int characters;
 			characters = sprintf_s(temp, sizeof(temp), "controllerService!>contr>gRumble>%d>%d>\0", cNumber, controllerList[cNumber]->rumble); //characters: total ammount
 			zmq_send(pushPtr, temp, characters, 0);
+		}
+		//only update when necessary
+		else if (commands[2] == "sDiff")
+		{
+			updateOnChange = stoi(commands[3]);
+			if (updateOnChange != 0 && updateOnChange != 1) //has to be 0 or 1
+			{
+				zmq_send(pushPtr, ERR_INV_UPDATE_SPEED, sizeof(ERR_INV_UPDATE_SPEED), 0);
+			}
+			else //ok, set it
+			{
+				controllerList[cNumber]->onlyNewUpdate = stoi(commands[3], NULL, 10);
+			}
 		}
 		//add extra 3rd command here
 		else

@@ -15,6 +15,11 @@ public:
 	int updateSpeed = 500;								//ms
 	bool rumble = false;
 	std::string type;
+
+	//used to only update when something changed
+	std::string prevRespons;
+	bool onlyNewUpdate = false;
+	
 	//functions
 	virtual bool getData() = 0;
 	virtual bool sendData() = 0;
