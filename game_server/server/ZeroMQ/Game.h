@@ -287,8 +287,20 @@ public:
 				quit = true;
 				cout << "quit";
 			}
+		else {
+			if (commands[0] == "1" && commands[1] == "join")
+			{
+				Player1Name = commands[2];
+				//Player1Name = "links";
+			}
+			if (commands[0] == "2" && commands[1] == "join")
+			{
+				Player2Name = commands[2];
+				//Player2Name = "rechts";
+			}
+		}
 		//add playernames
-		if (commands[0] == "1" && commands[1] == "join")
+/*		if (commands[0] == "1" && commands[1] == "join")
 		{
 			Player1Name = commands[2];
 			//Player1Name = "links";
@@ -297,7 +309,7 @@ public:
 		{
 			Player2Name = commands[2];
 			//Player2Name = "rechts";
-		}
+		}*/
 		cout << Player1Name << score1 << endl << Player2Name << score2 << endl; //write playernames to terminal*/
 		//cout << "score1: " << score1 << endl << "score2: " << score2 << endl;
 	}

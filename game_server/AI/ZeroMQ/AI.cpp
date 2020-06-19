@@ -27,10 +27,6 @@ int main(int argc, char* argv[])
 	zmq_setsockopt(subPtr, ZMQ_SUBSCRIBE, "bart>", 5);
 	string commands[4];			//the commands
 	char buffer[265];
-	string temp_buffer;
-	int length;
-	//temp_buffer.clear();
-	length = zmq_recv(subPtr, buffer, sizeof(buffer), ZMQ_NOBLOCK);
 	//Decode the message received
 	char* currPosPtr = buffer;
 	char* nextPosPtr = buffer;
@@ -41,6 +37,7 @@ int main(int argc, char* argv[])
 
 	while (1)
 	{
+		//ZMQ comm.
 		for (short i = 0; i < 4; ++i)  //max commands = 4
 		{
 			currPosPtr = strchr(currPosPtr + 1, '>');							//find where the > character is: shifts up each time
@@ -60,7 +57,7 @@ int main(int argc, char* argv[])
 			
 		if (commands[1] == "balldown")
 			zmq_send(pushPtr, "bart>1>down2>", 13, 0);
-			
+	//random movements
 		/*srand((unsigned)time(0));
 		int result = 1 + (rand() % 3);
 		printf("%d \n", result);
@@ -77,7 +74,7 @@ int main(int argc, char* argv[])
 			printf("Error");
 			break;
 		}
-	
+	//pattern
 	zmq_send(pushPtr, "bart>1>down2>", 13, 0);
 	zmq_send(pushPtr, "bart>1>down2>", 13, 0);
 	zmq_send(pushPtr, "bart>1>down2>", 13, 0);
