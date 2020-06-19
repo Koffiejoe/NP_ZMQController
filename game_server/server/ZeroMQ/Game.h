@@ -204,7 +204,7 @@ public:
 			cout << "\xB2";
 		cout << endl;
 
-		cout << "Score 1: " << score1 << endl << "Score 2: " << score2 << endl;
+		
 	}
 	void Input()
 	{
@@ -249,6 +249,8 @@ public:
 		char* currPosPtr = buffer;
 		char* nextPosPtr = buffer;
 		char temp[20];
+		string Player1Name;
+		string Player2Name;
 		
 		for (short i = 0; i < 4; ++i)  //max commands = 4
 		{
@@ -263,8 +265,7 @@ public:
 			temp[(nextPosPtr - currPosPtr) - 1] = NULL;							//add terminating NULL
 			commands[i] = temp;
 		}
-		//string commands = buffer;
-		//cout << commands[1];
+
 		if (commands[1] == "up1")
 			if (player1y > 0) {
 				player1->moveUp();
@@ -290,6 +291,16 @@ public:
 				quit = true;
 				cout << "quit";
 			}
+		//add playernames
+		if (commands[0] == "1")
+		{
+			Player1Name = commands[2];
+		}
+		if (commands[0] == "2")
+		{
+			Player2Name = commands[2];
+		}
+		cout << Player1Name << score1 << endl << Player2Name << score2 << endl; //write playernames to terminal
 	}
 	void Logic()
 	{
@@ -324,6 +335,10 @@ public:
 		//left wall
 		if (ballx == 0)
 			ScoreUp(player2);
+		/*const void positionx() == ballx;
+
+		zmq_send(pushPtr, positionx, 11, 0);
+		zmq_send(pushPtr, bally, 11, 0);*/
 	}
 	void Run()
 	{

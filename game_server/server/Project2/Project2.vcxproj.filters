@@ -15,18 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="game_server.cpp">
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ZeroMQ\game_server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ZMQHandler.h">
+    <ClInclude Include="..\ZeroMQ\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="zmq.h">
+    <ClInclude Include="..\ZeroMQ\zmq.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="..\ZeroMQ\ZMQHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
