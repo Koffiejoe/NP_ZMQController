@@ -269,22 +269,18 @@ public:
 		if (commands[1] == "up1")
 			if (player1y > 0) {
 				player1->moveUp();
-				cout << "up left";
 			}
 		if (commands[1] == "up2")
 			if (player2y > 0) {
 				player2->moveUp();
-				cout << "up right";
 			}
 		if (commands[1] == "down1")
 			if (player1y + 4 < height) {
 				player1->moveDown();
-				cout << "down left";
 			}
 		if (commands[1] == "down2")
 			if (player2y + 4 < height) {
 				player2->moveDown();
-				cout << "down right";
 			}
 		if (commands[0] == "quit")
 			{
@@ -292,15 +288,18 @@ public:
 				cout << "quit";
 			}
 		//add playernames
-		if (commands[0] == "1")
+		if (commands[0] == "1" && commands[1] == "join")
 		{
 			Player1Name = commands[2];
+			//Player1Name = "links";
 		}
-		if (commands[0] == "2")
+		if (commands[0] == "2" && commands[1] == "join")
 		{
 			Player2Name = commands[2];
+			//Player2Name = "rechts";
 		}
-		cout << Player1Name << score1 << endl << Player2Name << score2 << endl; //write playernames to terminal
+		cout << Player1Name << score1 << endl << Player2Name << score2 << endl; //write playernames to terminal*/
+		//cout << "score1: " << score1 << endl << "score2: " << score2 << endl;
 	}
 	void Logic()
 	{
@@ -325,10 +324,15 @@ public:
 
 		//bottom wall
 		if (bally == height - 1)
+		{
 			ball->changeDirection(ball->getDirection() == DOWNRIGHT ? UPRIGHT : UPLEFT);
+			zmq_send(pushPtr, "bart>1>ballup>", 14, 0);
+		}
 		//top wall
-		if (bally == 0)
+		if (bally == 0) {
 			ball->changeDirection(ball->getDirection() == UPRIGHT ? DOWNRIGHT : DOWNLEFT);
+			zmq_send(pushPtr, "bart>1>balldown>", 16, 0);
+		}
 		//right wall
 		if (ballx == width - 1)
 			ScoreUp(player1);
