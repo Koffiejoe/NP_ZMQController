@@ -15,7 +15,6 @@
 
 int main(int argc, char* argv[])
 {
-
 	std::cout << "########----ControllerServer Started! ----########" << std::endl;
 	std::cout << "##################################################" << std::endl << std::endl;
 

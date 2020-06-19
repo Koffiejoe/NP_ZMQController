@@ -38,12 +38,12 @@ int ZMQHandler::recv()
 	}
 
 	//Decode the message received
-	std::string commands[4];			//the commands
+	std::string commands[6];			//the commands
 	char* currPosPtr = buffer;
 	char* nextPosPtr = buffer;
-	char temp[20];
+	char temp[250];
 
-	for (short i = 0; i < 4; ++i)  //max commands = 4
+	for (short i = 0; i < 6; ++i)  //max commands = 6
 	{
 		currPosPtr = strchr(currPosPtr + 1, '>');							//find where the > character is: shifts up each time
 		if (currPosPtr == NULL) { break; }									//for < 3 commands
@@ -95,10 +95,23 @@ int ZMQHandler::send()
 				controllerList[contrNum]->prevRespons = controllerList[contrNum]->getRawData(); //update prev val
 			}
 
+			//custom respons for certain buttonpress
+			string tempContrData;
+			tempContrData = controllerList[contrNum]->getRawData();
+			for (int topic = 0; topic < controllerList[contrNum]->customTopicTrigger.size(); topic++)
+			{
+				if (controllerList[contrNum]->customTopicTrigger.at(topic) == tempContrData)
+				{
+					tempContrData = controllerList[contrNum]->custonTopicRespons.at(topic);
+					written = sprintf_s(temp, sizeof(temp),"%s\0", tempContrData.c_str());
+					zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0	
+				}
+			}
 
 			controllerList[contrNum]->lastUpdate = std::chrono::steady_clock::now(); //set last updatetime to now
 			std::cout << temp << std::endl;
 		}
+		
 
 	}
 
@@ -194,6 +207,12 @@ int ZMQHandler::sendRespons(std::string* commands)
 			{
 				controllerList[cNumber]->onlyNewUpdate = stoi(commands[3], NULL, 10);
 			}
+		}
+		//set custom topic respons
+		else if (commands[2] == "sTopic")
+		{
+			controllerList[cNumber]->customTopicTrigger.push_back(commands[3]);
+			controllerList[cNumber]->custonTopicRespons.push_back(commands[4]);
 		}
 		//add extra 3rd command here
 		else

@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <string>
 #include <chrono>
+#include <vector>
 #include "serial.h"
 
 class controller
@@ -20,6 +21,10 @@ public:
 	std::string prevRespons;
 	bool onlyNewUpdate = false;
 	
+	//specific topic with specific presses
+	std::vector<std::string> customTopicTrigger; //data on which to trigger
+	std::vector<std::string> custonTopicRespons; //data to respond with
+
 	//functions
 	virtual bool getData() = 0;
 	virtual bool sendData() = 0;
