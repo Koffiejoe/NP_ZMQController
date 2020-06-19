@@ -104,7 +104,7 @@ int ZMQHandler::send()
 				{
 					tempContrData = controllerList[contrNum]->custonTopicRespons.at(topic);
 					written = sprintf_s(temp, sizeof(temp),"%s\0", tempContrData.c_str());
-					zmq_send(pushPtr, temp, written + 1, 0); //written + 1 gives term /0	
+					zmq_send(pushPtr, temp, written + 1, 0);									//written + 1 gives term /0	
 				}
 			}
 
